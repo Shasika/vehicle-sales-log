@@ -1,6 +1,7 @@
 import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { NavigationProvider } from '@/contexts/NavigationContext';
 
 export default function RootLayout({
   children,
@@ -11,9 +12,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16 sm:pb-0 transition-colors duration-200">
         <ThemeProvider>
-          <ClientLayout>
-            {children}
-          </ClientLayout>
+          <NavigationProvider>
+            <ClientLayout>
+              {children}
+            </ClientLayout>
+          </NavigationProvider>
         </ThemeProvider>
       </body>
     </html>
