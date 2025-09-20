@@ -24,9 +24,9 @@ interface Person {
 }
 
 const typeColors = {
-  'Individual': 'bg-blue-100 text-blue-800',
-  'Dealer': 'bg-green-100 text-green-800',
-  'Company': 'bg-purple-100 text-purple-800'
+  'Individual': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  'Dealer': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  'Company': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
 };
 
 const typeIcons = {
@@ -142,10 +142,10 @@ export default function PersonsList() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-            <div className="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
-            <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+          <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
+            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
+            <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2 mb-4"></div>
+            <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-2/3"></div>
           </div>
         ))}
       </div>
@@ -155,11 +155,11 @@ export default function PersonsList() {
   return (
     <div className="space-y-6">
       {/* Stylish Filter Button Groups */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Filter People</h2>
-            <p className="text-sm text-gray-600">Choose a category to view specific types of contacts</p>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">Filter People</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Choose a category to view specific types of contacts</p>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -205,20 +205,20 @@ export default function PersonsList() {
 
               const colorClasses = {
                 blue: isActive
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200'
-                  : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:border-blue-300',
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200 dark:shadow-blue-900/20'
+                  : 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-800/40 hover:border-blue-300 dark:hover:border-blue-600',
                 indigo: isActive
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-200'
-                  : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300',
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20'
+                  : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-800/40 hover:border-indigo-300 dark:hover:border-indigo-600',
                 green: isActive
-                  ? 'bg-green-600 text-white border-green-600 shadow-lg shadow-green-200'
-                  : 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100 hover:border-green-300',
+                  ? 'bg-green-600 text-white border-green-600 shadow-lg shadow-green-200 dark:shadow-green-900/20'
+                  : 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 hover:bg-green-100 dark:hover:bg-green-800/40 hover:border-green-300 dark:hover:border-green-600',
                 purple: isActive
-                  ? 'bg-purple-600 text-white border-purple-600 shadow-lg shadow-purple-200'
-                  : 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:border-purple-300',
+                  ? 'bg-purple-600 text-white border-purple-600 shadow-lg shadow-purple-200 dark:shadow-purple-900/20'
+                  : 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-800/40 hover:border-purple-300 dark:hover:border-purple-600',
                 red: isActive
-                  ? 'bg-red-600 text-white border-red-600 shadow-lg shadow-red-200'
-                  : 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100 hover:border-red-300'
+                  ? 'bg-red-600 text-white border-red-600 shadow-lg shadow-red-200 dark:shadow-red-900/20'
+                  : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700 hover:bg-red-100 dark:hover:bg-red-800/40 hover:border-red-300 dark:hover:border-red-600'
               };
 
               return (
@@ -237,14 +237,14 @@ export default function PersonsList() {
                   <span className="sm:hidden">{filterItem.label.split(' ')[0]}</span>
                   <span className={`
                     inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold min-w-[20px]
-                    ${isActive ? 'bg-white/20 text-white' : 'bg-white text-gray-700'}
+                    ${isActive ? 'bg-white/20 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200'}
                   `}>
                     {filterItem.count}
                   </span>
 
                   {isActive && (
                     <div className="absolute -top-1 -right-1">
-                      <div className="h-3 w-3 bg-yellow-400 rounded-full border-2 border-white"></div>
+                      <div className="h-3 w-3 bg-yellow-400 rounded-full border-2 border-white dark:border-gray-800"></div>
                     </div>
                   )}
                 </button>
@@ -255,20 +255,20 @@ export default function PersonsList() {
 
         {/* Active Filter Indicator */}
         {filter !== 'all' && (
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Showing:</span>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Showing:</span>
+                <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {filter === 'blacklisted' ? 'Blacklisted People' : `${filter} Contacts`}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   ({filteredPersons.length} {filteredPersons.length === 1 ? 'result' : 'results'})
                 </span>
               </div>
               <button
                 onClick={() => setFilter('all')}
-                className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
               >
                 Clear Filter
               </button>
@@ -280,17 +280,17 @@ export default function PersonsList() {
       {/* Total Count Display */}
       <div className="flex justify-end">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-          <div className="text-gray-600">
-            Showing <span className="font-semibold text-gray-900">{totalItems}</span> people total
+          <div className="text-gray-600 dark:text-gray-300">
+            Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{totalItems}</span> people total
           </div>
-          <div className="text-gray-400 hidden sm:block">•</div>
-          <div className="text-gray-600">
-            Page: <span className="font-semibold text-gray-900">{filteredPersons.length}</span> result{filteredPersons.length !== 1 ? 's' : ''}
+          <div className="text-gray-400 dark:text-gray-500 hidden sm:block">•</div>
+          <div className="text-gray-600 dark:text-gray-300">
+            Page: <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredPersons.length}</span> result{filteredPersons.length !== 1 ? 's' : ''}
           </div>
           {(filter !== 'all') && (
             <>
-              <div className="text-gray-400 hidden sm:block">•</div>
-              <div className="text-sm text-blue-600">
+              <div className="text-gray-400 dark:text-gray-500 hidden sm:block">•</div>
+              <div className="text-sm text-blue-600 dark:text-blue-400">
                 🔍 Filters applied
               </div>
             </>
@@ -301,9 +301,9 @@ export default function PersonsList() {
       {/* Persons Grid */}
       {filteredPersons.length === 0 ? (
         <div className="text-center py-12">
-          <User className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No people</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <User className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No people</h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {filter === 'all' ? 'Get started by adding a new person.' : `No ${filter.toLowerCase()} found.`}
           </p>
         </div>
@@ -314,12 +314,12 @@ export default function PersonsList() {
             const displayName = person.fullName || person.businessName || 'Unnamed';
             
             return (
-              <div key={person.id || (person as any)._id} className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+              <div key={person.id || (person as any)._id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-shadow">
                 <div className="p-6">
                   {/* Header with type and blacklist warning */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <Icon className="h-5 w-5 text-gray-400" />
+                      <Icon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${typeColors[person.type]}`}>
                         {person.type}
                       </span>
@@ -330,24 +330,24 @@ export default function PersonsList() {
                   </div>
 
                   {/* Name */}
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 truncate">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 truncate">
                     {displayName}
                   </h3>
 
                   {/* Contact Information */}
                   <div className="space-y-2 mb-4">
                     {person.phone.length > 0 && (
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
                         <Phone className="h-4 w-4" />
                         <span>{person.phone[0]}</span>
                         {person.phone.length > 1 && (
-                          <span className="text-gray-400">+{person.phone.length - 1} more</span>
+                          <span className="text-gray-400 dark:text-gray-500">+{person.phone.length - 1} more</span>
                         )}
                       </div>
                     )}
                     
                     {person.email && (
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
                         <Mail className="h-4 w-4" />
                         <span className="truncate">{person.email}</span>
                       </div>
@@ -355,7 +355,7 @@ export default function PersonsList() {
                   </div>
 
                   {/* Identification */}
-                  <div className="text-xs text-gray-500 mb-4">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
                     {person.nicOrPassport && (
                       <div>ID: {person.nicOrPassport}</div>
                     )}
@@ -366,7 +366,7 @@ export default function PersonsList() {
 
                   {/* Address */}
                   {person.address && (
-                    <div className="text-sm text-gray-600 mb-4">
+                    <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                       <p className="truncate" title={person.address}>
                         {person.address}
                       </p>
@@ -375,8 +375,8 @@ export default function PersonsList() {
 
                   {/* Risk Notes */}
                   {person.riskNotes && (
-                    <div className="mb-4 p-2 bg-yellow-50 border border-yellow-200 rounded">
-                      <p className="text-xs text-yellow-800">
+                    <div className="mb-4 p-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded">
+                      <p className="text-xs text-yellow-800 dark:text-yellow-200">
                         <strong>Risk:</strong> {person.riskNotes}
                       </p>
                     </div>
@@ -386,7 +386,7 @@ export default function PersonsList() {
                   <div className="flex justify-between items-center">
                     <Link
                       href={`/persons/${person.id || (person as any)._id}`}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium"
                     >
                       View Details
                     </Link>
@@ -394,21 +394,21 @@ export default function PersonsList() {
                     <div className="flex space-x-2">
                       <Link
                         href={`/persons/${person.id || (person as any)._id}`}
-                        className="p-1 text-gray-400 hover:text-green-600"
+                        className="p-1 text-gray-400 dark:text-gray-500 hover:text-green-600 dark:hover:text-green-400"
                         title="View Details"
                       >
                         <Eye className="h-4 w-4" />
                       </Link>
                       <Link
                         href={`/persons/${person.id || (person as any)._id}/edit`}
-                        className="p-1 text-gray-400 hover:text-blue-600"
+                        className="p-1 text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
                         title="Edit Person"
                       >
                         <Edit className="h-4 w-4" />
                       </Link>
                       <button
                         onClick={() => handleDelete(person.id || (person as any)._id, person.fullName || person.businessName || 'Unknown')}
-                        className="p-1 text-gray-400 hover:text-red-600"
+                        className="p-1 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400"
                         title="Delete Person"
                       >
                         <Trash2 className="h-4 w-4" />

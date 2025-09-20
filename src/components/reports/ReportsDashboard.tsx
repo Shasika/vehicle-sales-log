@@ -158,18 +158,18 @@ export default function ReportsDashboard() {
         {/* Loading stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+            <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+              <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
             </div>
           ))}
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+            <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4"></div>
+              <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
             </div>
           ))}
         </div>
@@ -180,7 +180,7 @@ export default function ReportsDashboard() {
   return (
     <div className="space-y-6">
       {/* Date Range and Export Controls */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 bg-white rounded-lg border border-gray-200 p-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
           <DatePicker
             label="From"
@@ -212,60 +212,60 @@ export default function ReportsDashboard() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                 {formatCurrencyWithRs(reportData.totalRevenue)}
               </p>
             </div>
-            <TrendingUp className="h-8 w-8 text-green-600" />
+            <TrendingUp className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Expenses</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">
                 {formatCurrencyWithRs(reportData.totalExpenses)}
               </p>
             </div>
-            <TrendingDown className="h-8 w-8 text-red-600" />
+            <TrendingDown className="h-8 w-8 text-red-600 dark:text-red-400" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Net Profit</p>
-              <p className={`text-2xl font-bold ${reportData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Net Profit</p>
+              <p className={`text-2xl font-bold ${reportData.netProfit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {formatCurrencyWithRs(reportData.netProfit)}
               </p>
               {profitTrend && (
-                <div className={`flex items-center mt-1 text-sm ${profitTrend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`flex items-center mt-1 text-sm ${profitTrend.isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                   {profitTrend.isPositive ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
                   {Math.abs(profitTrend.percentage).toFixed(1)}% vs last month
                 </div>
               )}
             </div>
-            <DollarSign className={`h-8 w-8 ${reportData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`} />
+            <DollarSign className={`h-8 w-8 ${reportData.netProfit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`} />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Vehicles Traded</p>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Vehicles Traded</p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                 {reportData.vehiclesSold + reportData.vehiclesPurchased}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {reportData.vehiclesSold} sold • {reportData.vehiclesPurchased} bought
               </p>
             </div>
-            <Car className="h-8 w-8 text-blue-600" />
+            <Car className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
       </div>
@@ -273,130 +273,130 @@ export default function ReportsDashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Trend */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <BarChart3 className="h-5 w-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+            <BarChart3 className="h-5 w-5 mr-2 text-gray-700 dark:text-gray-300" />
             Monthly Performance
           </h3>
-          
+
           <div className="space-y-4">
             {reportData.monthlyData.slice(-6).map((month, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <Calendar className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm font-medium text-gray-900">{month.month}</span>
+                  <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{month.month}</span>
                 </div>
                 <div className="text-right">
-                  <p className={`text-sm font-semibold ${month.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`text-sm font-semibold ${month.profit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                     {formatCurrencyWithRs(month.profit)}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {formatCurrencyWithRs(month.revenue)} revenue
                   </p>
                 </div>
               </div>
             ))}
-            
+
             {reportData.monthlyData.length === 0 && (
-              <p className="text-sm text-gray-500 text-center py-8">No monthly data available</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">No monthly data available</p>
             )}
           </div>
         </div>
 
         {/* Expense Breakdown */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Receipt className="h-5 w-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+            <Receipt className="h-5 w-5 mr-2 text-gray-700 dark:text-gray-300" />
             Expense Categories
           </h3>
-          
+
           <div className="space-y-4">
             {reportData.categoryBreakdown.map((category, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900 capitalize">{category.category}</p>
-                  <p className="text-xs text-gray-500">{category.count} expenses</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize">{category.category}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{category.count} expenses</p>
                 </div>
-                <p className="text-sm font-semibold text-red-600">
+                <p className="text-sm font-semibold text-red-600 dark:text-red-400">
                   {formatCurrencyWithRs(category.amount)}
                 </p>
               </div>
             ))}
-            
+
             {reportData.categoryBreakdown.length === 0 && (
-              <p className="text-sm text-gray-500 text-center py-8">No expense data available</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">No expense data available</p>
             )}
           </div>
         </div>
 
         {/* Top Performing Vehicles */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Car className="h-5 w-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+            <Car className="h-5 w-5 mr-2 text-gray-700 dark:text-gray-300" />
             Top Performers
           </h3>
-          
+
           <div className="space-y-4">
             {reportData.topPerformers.map((performer, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 text-xs font-bold rounded-full flex items-center justify-center">
+                  <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-full flex items-center justify-center">
                     {index + 1}
                   </span>
-                  <span className="text-sm font-medium text-gray-900">{performer.vehicle}</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{performer.vehicle}</span>
                 </div>
-                <p className="text-sm font-semibold text-green-600">
+                <p className="text-sm font-semibold text-green-600 dark:text-green-400">
                   {formatCurrencyWithRs(performer.profit)}
                 </p>
               </div>
             ))}
-            
+
             {reportData.topPerformers.length === 0 && (
-              <p className="text-sm text-gray-500 text-center py-8">No vehicle data available</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">No vehicle data available</p>
             )}
           </div>
         </div>
 
         {/* Quick Stats */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Users className="h-5 w-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+            <Users className="h-5 w-5 mr-2 text-gray-700 dark:text-gray-300" />
             Quick Stats
           </h3>
-          
+
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Average Profit per Vehicle</span>
-              <span className="text-sm font-semibold text-gray-900">
-                {reportData.vehiclesSold > 0 
+              <span className="text-sm text-gray-600 dark:text-gray-400">Average Profit per Vehicle</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                {reportData.vehiclesSold > 0
                   ? formatCurrencyWithRs(reportData.netProfit / reportData.vehiclesSold)
                   : formatCurrencyWithRs(0)
                 }
               </span>
             </div>
-            
+
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Profit Margin</span>
-              <span className="text-sm font-semibold text-gray-900">
-                {reportData.totalRevenue > 0 
+              <span className="text-sm text-gray-600 dark:text-gray-400">Profit Margin</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                {reportData.totalRevenue > 0
                   ? `${((reportData.netProfit / reportData.totalRevenue) * 100).toFixed(1)}%`
                   : '0%'
                 }
               </span>
             </div>
-            
+
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Days in Period</span>
-              <span className="text-sm font-semibold text-gray-900">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Days in Period</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {Math.ceil((new Date(dateRange.to).getTime() - new Date(dateRange.from).getTime()) / (1000 * 60 * 60 * 24))}
               </span>
             </div>
-            
+
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Avg Daily Revenue</span>
-              <span className="text-sm font-semibold text-gray-900">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Avg Daily Revenue</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {formatCurrencyWithRs(
-                  reportData.totalRevenue / 
+                  reportData.totalRevenue /
                   Math.max(1, Math.ceil((new Date(dateRange.to).getTime() - new Date(dateRange.from).getTime()) / (1000 * 60 * 60 * 24)))
                 )}
               </span>

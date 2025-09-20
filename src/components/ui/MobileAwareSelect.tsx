@@ -58,7 +58,7 @@ export default function MobileAwareSelect({
   return (
     <div className={`space-y-1 ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -70,12 +70,12 @@ export default function MobileAwareSelect({
           disabled={disabled}
           className={`
             w-full px-3 py-2.5 pr-10 text-sm
-            border border-gray-300 rounded-md shadow-sm
-            bg-white text-gray-900
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-            disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed
+            border border-gray-300 dark:border-gray-600 rounded-md shadow-sm
+            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+            focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400
+            disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed
             appearance-none cursor-pointer
-            ${error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}
+            ${error ? 'border-red-300 dark:border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
             ${isMobile ? 'text-base' : 'text-sm'} // Prevent zoom on iOS
           `}
           style={{
@@ -98,7 +98,7 @@ export default function MobileAwareSelect({
 
         {/* Custom dropdown arrow - hidden on mobile since native arrow works better */}
         <div className={`absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none ${isMobile ? 'hidden' : 'block'}`}>
-          <ChevronDown className="h-4 w-4 text-gray-400" />
+          <ChevronDown className="h-4 w-4 text-gray-400 dark:text-gray-500" />
         </div>
       </div>
 

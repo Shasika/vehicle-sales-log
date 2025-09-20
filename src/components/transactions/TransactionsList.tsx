@@ -175,10 +175,10 @@ export default function TransactionsList() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Paid': return 'bg-green-100 text-green-800';
-      case 'Partial': return 'bg-yellow-100 text-yellow-800';
-      case 'Unpaid': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Paid': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'Partial': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'Unpaid': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
     }
   };
 
@@ -187,13 +187,13 @@ export default function TransactionsList() {
     return (
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm animate-pulse">
+          <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
             <div className="flex justify-between items-start">
               <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-48"></div>
-                <div className="h-3 bg-gray-200 rounded w-32"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
               </div>
-              <div className="h-6 bg-gray-200 rounded w-20"></div>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
             </div>
           </div>
         ))}
@@ -229,23 +229,23 @@ export default function TransactionsList() {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-          <div className="text-gray-600">
-            Showing <span className="font-semibold text-gray-900">{totalItems}</span> transaction{totalItems !== 1 ? 's' : ''} total
+          <div className="text-gray-600 dark:text-gray-300">
+            Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{totalItems}</span> transaction{totalItems !== 1 ? 's' : ''} total
           </div>
-          <div className="text-gray-400 hidden sm:block">•</div>
-          <div className="text-gray-600">
-            Page: <span className="font-semibold text-gray-900">{filteredTransactions.length}</span> result{filteredTransactions.length !== 1 ? 's' : ''}
+          <div className="text-gray-400 dark:text-gray-500 hidden sm:block">•</div>
+          <div className="text-gray-600 dark:text-gray-300">
+            Page: <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredTransactions.length}</span> result{filteredTransactions.length !== 1 ? 's' : ''}
           </div>
         </div>
       </div>
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Purchases</p>
-              <p className="text-xl font-semibold text-red-600">
+              <p className="text-sm text-gray-600 dark:text-gray-300">Total Purchases</p>
+              <p className="text-xl font-semibold text-red-600 dark:text-red-400">
                 {formatCurrencyWithRs(
                   filteredTransactions
                     .filter(t => t.direction === 'IN')
@@ -253,15 +253,15 @@ export default function TransactionsList() {
                 )}
               </p>
             </div>
-            <ArrowDownLeft className="h-8 w-8 text-red-600" />
+            <ArrowDownLeft className="h-8 w-8 text-red-600 dark:text-red-400" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Sales</p>
-              <p className="text-xl font-semibold text-green-600">
+              <p className="text-sm text-gray-600 dark:text-gray-300">Total Sales</p>
+              <p className="text-xl font-semibold text-green-600 dark:text-green-400">
                 {formatCurrencyWithRs(
                   filteredTransactions
                     .filter(t => t.direction === 'OUT')
@@ -269,32 +269,32 @@ export default function TransactionsList() {
                 )}
               </p>
             </div>
-            <ArrowUpRight className="h-8 w-8 text-green-600" />
+            <ArrowUpRight className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Net Profit</p>
-              <p className="text-xl font-semibold text-blue-600">
+              <p className="text-sm text-gray-600 dark:text-gray-300">Net Profit</p>
+              <p className="text-xl font-semibold text-blue-600 dark:text-blue-400">
                 {formatCurrencyWithRs(
                   filteredTransactions.filter(t => t.direction === 'OUT').reduce((sum, t) => sum + t.totalPrice, 0) -
                   filteredTransactions.filter(t => t.direction === 'IN').reduce((sum, t) => sum + t.totalPrice, 0)
                 )}
               </p>
             </div>
-            <DollarSign className="h-8 w-8 text-blue-600" />
+            <DollarSign className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
       </div>
 
       {/* Transactions List */}
       {filteredTransactions.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No transactions</h3>
-          <p className="mt-1 text-sm text-gray-500">
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+          <Calendar className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No transactions</h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {filter === 'all' ? 'Get started by adding a new transaction.' : `No ${filter === 'IN' ? 'purchase' : 'sale'} transactions found.`}
           </p>
         </div>
@@ -306,14 +306,14 @@ export default function TransactionsList() {
             const counterpartyName = transaction.counterpartyId?.fullName || transaction.counterpartyId?.businessName || 'Unknown';
             
             return (
-              <div key={transaction._id || transaction.id} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div key={transaction._id || transaction.id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md dark:hover:shadow-lg transition-shadow">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
                       <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${
-                        transaction.direction === 'IN' 
-                          ? 'bg-red-100 text-red-800' 
-                          : 'bg-green-100 text-green-800'
+                        transaction.direction === 'IN'
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                       }`}>
                         {transaction.direction === 'IN' ? (
                           <ArrowDownLeft className="h-4 w-4" />
@@ -330,48 +330,48 @@ export default function TransactionsList() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="flex items-start space-x-3">
-                        <Car className="h-5 w-5 text-gray-400 mt-0.5" />
+                        <Car className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5" />
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
                             {transaction.vehicleId?.registrationNumber}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
                             {transaction.vehicleId?.make} {transaction.vehicleId?.vehicleModel} {transaction.vehicleId?.year ? `(${transaction.vehicleId.year})` : ''}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-start space-x-3">
-                        <User className="h-5 w-5 text-gray-400 mt-0.5" />
+                        <User className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5" />
                         <div>
-                          <p className="font-medium text-gray-900">{counterpartyName}</p>
-                          <p className="text-sm text-gray-600 capitalize">{transaction.counterpartyId?.type || 'Unknown'}</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{counterpartyName}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 capitalize">{transaction.counterpartyId?.type || 'Unknown'}</p>
                         </div>
                       </div>
 
                       <div className="flex items-start space-x-3">
-                        <Calendar className="h-5 w-5 text-gray-400 mt-0.5" />
+                        <Calendar className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5" />
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
                             {format(new Date(transaction.date), 'MMM dd, yyyy')}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
                             {format(new Date(transaction.date), 'h:mm a')}
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-gray-200">
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                       <div className="flex justify-between items-center">
                         <div>
-                          <p className="text-sm text-gray-600">
-                            Total: <span className="font-semibold text-gray-900">{formatCurrencyWithRs(transaction.totalPrice)}</span>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Total: <span className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrencyWithRs(transaction.totalPrice)}</span>
                           </p>
-                          <p className="text-sm text-gray-600">
-                            Paid: <span className="font-semibold text-green-600">{formatCurrencyWithRs(totalPaid)}</span>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Paid: <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrencyWithRs(totalPaid)}</span>
                             {totalPaid < transaction.totalPrice && (
-                              <span className="ml-2 text-red-600">
+                              <span className="ml-2 text-red-600 dark:text-red-400">
                                 (Remaining: {formatCurrencyWithRs(transaction.totalPrice - totalPaid)})
                               </span>
                             )}
@@ -397,7 +397,7 @@ export default function TransactionsList() {
                             size="sm"
                             variant="outline"
                             onClick={() => handleDelete(transaction.id || (transaction as any)._id || '')}
-                            className="text-red-600 hover:text-red-800"
+                            className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

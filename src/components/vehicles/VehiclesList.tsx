@@ -38,10 +38,10 @@ interface Vehicle {
 }
 
 const statusColors = {
-  'NotOwned': 'bg-gray-100 text-gray-800',
-  'InStock': 'bg-green-100 text-green-800',
-  'Booked': 'bg-yellow-100 text-yellow-800',
-  'Sold': 'bg-red-100 text-red-800'
+  'NotOwned': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+  'InStock': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  'Booked': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  'Sold': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
 };
 
 export default function VehiclesList() {
@@ -255,10 +255,10 @@ export default function VehiclesList() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm animate-pulse">
-            <div className="h-32 bg-gray-200 rounded mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
+            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
           </div>
         ))}
       </div>
@@ -268,9 +268,9 @@ export default function VehiclesList() {
   return (
     <div className="space-y-6">
       {/* Advanced Search and Filter Bar */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
         {/* Search and Filter Controls */}
-        <div className="p-4 lg:p-6 border-b border-gray-200">
+        <div className="p-4 lg:p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex flex-col xl:flex-row gap-4">
             {/* Search Input */}
             <div className="flex-1 min-w-0">
@@ -279,7 +279,7 @@ export default function VehiclesList() {
                 placeholder="Search vehicles by registration, make, model, or color..."
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                icon={<Search className="h-5 w-5 text-gray-400" />}
+                icon={<Search className="h-5 w-5 text-gray-400 dark:text-gray-500" />}
                 iconPosition="left"
                 className="w-full"
               />
@@ -348,7 +348,7 @@ export default function VehiclesList() {
                     handleYearFilterChange('all');
                     handleSortChange('newest');
                   }}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors duration-200 whitespace-nowrap"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 whitespace-nowrap"
                 >
                   <X className="h-4 w-4" />
                   Clear All
@@ -375,38 +375,38 @@ export default function VehiclesList() {
               if (tab.key === 'all') {
                 buttonClasses += isActive
                   ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
-                  : 'text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200';
+                  : 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 border border-blue-200 dark:border-blue-700';
                 countClasses += isActive
                   ? 'bg-white/20 text-white'
-                  : 'bg-blue-200 text-blue-800';
+                  : 'bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200';
               } else if (tab.key === 'InStock') {
                 buttonClasses += isActive
                   ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25'
-                  : 'text-green-700 bg-green-50 hover:bg-green-100 border border-green-200';
+                  : 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 border border-green-200 dark:border-green-700';
                 countClasses += isActive
                   ? 'bg-white/20 text-white'
-                  : 'bg-green-200 text-green-800';
+                  : 'bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200';
               } else if (tab.key === 'Booked') {
                 buttonClasses += isActive
                   ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-lg shadow-yellow-500/25'
-                  : 'text-yellow-700 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200';
+                  : 'text-yellow-700 dark:text-yellow-300 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700';
                 countClasses += isActive
                   ? 'bg-white/20 text-white'
-                  : 'bg-yellow-200 text-yellow-800';
+                  : 'bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200';
               } else if (tab.key === 'Sold') {
                 buttonClasses += isActive
                   ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25'
-                  : 'text-red-700 bg-red-50 hover:bg-red-100 border border-red-200';
+                  : 'text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-700';
                 countClasses += isActive
                   ? 'bg-white/20 text-white'
-                  : 'bg-red-200 text-red-800';
+                  : 'bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200';
               } else if (tab.key === 'NotOwned') {
                 buttonClasses += isActive
                   ? 'bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-lg shadow-gray-500/25'
-                  : 'text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200';
+                  : 'text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600';
                 countClasses += isActive
                   ? 'bg-white/20 text-white'
-                  : 'bg-gray-200 text-gray-800';
+                  : 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200';
               }
 
               return (
@@ -429,17 +429,17 @@ export default function VehiclesList() {
       {/* Results Summary */}
       <div className="flex justify-end">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-          <div className="text-gray-600">
-            Showing <span className="font-semibold text-gray-900">{totalItems}</span> vehicle{totalItems !== 1 ? 's' : ''} total
+          <div className="text-gray-600 dark:text-gray-300">
+            Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{totalItems}</span> vehicle{totalItems !== 1 ? 's' : ''} total
           </div>
-          <div className="text-gray-400 hidden sm:block">•</div>
-          <div className="text-gray-600">
-            Page: <span className="font-semibold text-gray-900">{vehicles.length}</span> result{vehicles.length !== 1 ? 's' : ''}
+          <div className="text-gray-400 dark:text-gray-500 hidden sm:block">•</div>
+          <div className="text-gray-600 dark:text-gray-300">
+            Page: <span className="font-semibold text-gray-900 dark:text-gray-100">{vehicles.length}</span> result{vehicles.length !== 1 ? 's' : ''}
           </div>
           {(searchTerm || makeFilter !== 'all' || yearFilter !== 'all' || filter !== 'all') && (
             <>
-              <div className="text-gray-400 hidden sm:block">•</div>
-              <div className="text-sm text-blue-600">
+              <div className="text-gray-400 dark:text-gray-500 hidden sm:block">•</div>
+              <div className="text-sm text-blue-600 dark:text-blue-400">
                 <Filter className="inline h-4 w-4 mr-1" />
                 Filters applied
               </div>
@@ -451,19 +451,19 @@ export default function VehiclesList() {
       {/* Vehicles Grid */}
       {filteredVehicles.length === 0 ? (
         <div className="text-center py-12">
-          <Car className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No vehicles</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <Car className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No vehicles</h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {filter === 'all' ? 'Get started by adding a new vehicle.' : `No vehicles with status "${filter}".`}
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredVehicles.map((vehicle) => (
-            <div key={(vehicle as any)._id || vehicle.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <div key={(vehicle as any)._id || vehicle.id} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-shadow duration-200">
               {/* Vehicle Image */}
               <div 
-                className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative cursor-pointer hover:opacity-90 transition-opacity"
+                className="aspect-video bg-gray-100 dark:bg-gray-700 rounded-t-lg overflow-hidden relative cursor-pointer hover:opacity-90 transition-opacity"
                 onClick={() => {
                   if (vehicle.images && vehicle.images.length > 0) {
                     setSelectedVehicle(vehicle);
@@ -486,7 +486,7 @@ export default function VehiclesList() {
                   </>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Camera className="h-12 w-12 text-gray-400" />
+                    <Camera className="h-12 w-12 text-gray-400 dark:text-gray-500" />
                   </div>
                 )}
                 
@@ -501,16 +501,16 @@ export default function VehiclesList() {
               {/* Vehicle Info */}
               <div className="p-4 sm:p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
                     {vehicle.registrationNumber}
                   </h3>
                 </div>
                 
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">
                   {vehicle.make} {vehicle.vehicleModel} ({vehicle.year})
                 </p>
                 
-                <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-3">
+                <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
                   {vehicle.color && <span>{vehicle.color}</span>}
                   {vehicle.transmission && <span>{vehicle.transmission}</span>}
                   {vehicle.fuelType && <span>{vehicle.fuelType}</span>}
@@ -526,7 +526,7 @@ export default function VehiclesList() {
                         setShowImages(true);
                       }
                     }}
-                    className="flex items-center space-x-1 text-xs text-gray-500 hover:text-blue-600 transition-colors"
+                    className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                     disabled={!vehicle.images?.length}
                   >
                     <Camera className="h-3 w-3" />
@@ -537,7 +537,7 @@ export default function VehiclesList() {
                       setSelectedVehicle(vehicle);
                       setShowDocuments(true);
                     }}
-                    className="flex items-center space-x-1 text-xs text-blue-600 hover:text-blue-800"
+                    className="flex items-center space-x-1 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                     disabled={!vehicle.documents?.length}
                   >
                     <FileText className="h-3 w-3" />
@@ -549,7 +549,7 @@ export default function VehiclesList() {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
                   <Link
                     href={`/vehicles/${(vehicle as any)._id || vehicle.id}`}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium text-center sm:text-left py-1 sm:py-0"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium text-center sm:text-left py-1 sm:py-0"
                   >
                     View Details
                   </Link>
@@ -557,14 +557,14 @@ export default function VehiclesList() {
                   <div className="flex justify-center sm:justify-end space-x-3">
                     <button
                       onClick={() => handleEdit(vehicle)}
-                      className="p-2 text-gray-400 hover:text-blue-600 bg-gray-50 hover:bg-blue-50 rounded-md transition-colors"
+                      className="p-2 text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors"
                       title="Edit Vehicle"
                     >
                       <Edit className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete((vehicle as any)._id || vehicle.id)}
-                      className="p-2 text-gray-400 hover:text-red-600 bg-gray-50 hover:bg-red-50 rounded-md transition-colors"
+                      className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 bg-gray-50 dark:bg-gray-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
                       title="Delete Vehicle"
                     >
                       <Trash2 className="h-4 w-4" />

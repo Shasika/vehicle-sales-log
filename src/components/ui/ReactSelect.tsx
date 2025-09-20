@@ -38,23 +38,33 @@ const useIsMobile = () => {
 };
 
 // Custom styles with mobile optimization
-const getCustomStyles = (isMobile: boolean) => ({
+const getCustomStyles = (isMobile: boolean, isDark: boolean = false) => ({
   control: (provided: any, state: any) => ({
     ...provided,
     minHeight: '42px',
-    border: state.hasValue || state.isFocused ? '1px solid #3B82F6' : '1px solid #D1D5DB',
+    backgroundColor: isDark ? '#374151' : '#ffffff',
+    border: state.hasValue || state.isFocused
+      ? isDark ? '1px solid #60A5FA' : '1px solid #3B82F6'
+      : isDark ? '1px solid #4B5563' : '1px solid #D1D5DB',
     borderRadius: '0.375rem',
-    boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
+    boxShadow: state.isFocused
+      ? isDark ? '0 0 0 2px rgba(96, 165, 250, 0.1)' : '0 0 0 2px rgba(59, 130, 246, 0.1)'
+      : 'none',
     '&:hover': {
-      border: state.isFocused ? '1px solid #3B82F6' : '1px solid #9CA3AF'
+      border: state.isFocused
+        ? isDark ? '1px solid #60A5FA' : '1px solid #3B82F6'
+        : isDark ? '1px solid #6B7280' : '1px solid #9CA3AF'
     }
   }),
   menu: (provided: any) => ({
     ...provided,
     zIndex: 9999,
+    backgroundColor: isDark ? '#374151' : '#ffffff',
     borderRadius: '0.375rem',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    border: '1px solid #E5E7EB',
+    boxShadow: isDark
+      ? '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15)'
+      : '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+    border: isDark ? '1px solid #4B5563' : '1px solid #E5E7EB',
     ...(isMobile && {
       // Force fixed positioning on mobile
       position: 'fixed',
@@ -73,31 +83,37 @@ const getCustomStyles = (isMobile: boolean) => ({
   option: (provided: any, state: any) => ({
     ...provided,
     backgroundColor: state.isSelected
-      ? '#3B82F6'
+      ? isDark ? '#1E40AF' : '#3B82F6'
       : state.isFocused
-        ? '#EFF6FF'
-        : 'white',
-    color: state.isSelected ? 'white' : '#374151',
+        ? isDark ? '#1F2937' : '#EFF6FF'
+        : isDark ? '#374151' : 'white',
+    color: state.isSelected
+      ? 'white'
+      : isDark ? '#F3F4F6' : '#374151',
     padding: isMobile ? '14px 16px' : '12px 16px', // Larger touch targets on mobile
     fontSize: '14px',
     '&:hover': {
-      backgroundColor: state.isSelected ? '#3B82F6' : '#EFF6FF',
-      color: state.isSelected ? 'white' : '#374151'
+      backgroundColor: state.isSelected
+        ? isDark ? '#1E40AF' : '#3B82F6'
+        : isDark ? '#1F2937' : '#EFF6FF',
+      color: state.isSelected
+        ? 'white'
+        : isDark ? '#F3F4F6' : '#374151'
     }
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: '#374151',
+    color: isDark ? '#F3F4F6' : '#374151',
     fontSize: '14px'
   }),
   placeholder: (provided: any) => ({
     ...provided,
-    color: '#9CA3AF',
+    color: isDark ? '#6B7280' : '#9CA3AF',
     fontSize: '14px'
   }),
   input: (provided: any) => ({
     ...provided,
-    color: '#374151',
+    color: isDark ? '#F3F4F6' : '#374151',
     fontSize: '14px'
   }),
   valueContainer: (provided: any) => ({
@@ -109,10 +125,10 @@ const getCustomStyles = (isMobile: boolean) => ({
   }),
   dropdownIndicator: (provided: any, state: any) => ({
     ...provided,
-    color: '#9CA3AF',
+    color: isDark ? '#6B7280' : '#9CA3AF',
     padding: '8px',
     '&:hover': {
-      color: '#6B7280'
+      color: isDark ? '#9CA3AF' : '#6B7280'
     },
     transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
     transition: 'transform 0.2s'
@@ -159,7 +175,26 @@ export default function ReactSelect({
   ...props
 }: ReactSelectProps) {
   const isMobile = useIsMobile();
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const selectedOption = options.find(option => option.value === value) || null;
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark') ||
+                     window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkMode(isDark);
+    };
+
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleChange = (selectedOption: Option | null) => {
     onChange(selectedOption?.value || '');
@@ -168,7 +203,7 @@ export default function ReactSelect({
   return (
     <div className={`space-y-1 ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -179,7 +214,7 @@ export default function ReactSelect({
         value={selectedOption}
         onChange={handleChange}
         placeholder={placeholder}
-        styles={getCustomStyles(isMobile)}
+        styles={getCustomStyles(isMobile, isDarkMode)}
         components={{
           DropdownIndicator: CustomDropdownIndicator,
           Menu: CustomMenu,
@@ -237,7 +272,26 @@ export function ReactSelectSearchable({
   ...props
 }: ReactSelectProps) {
   const isMobile = useIsMobile();
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const selectedOption = options.find(option => option.value === value) || null;
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark') ||
+                     window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkMode(isDark);
+    };
+
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleChange = (selectedOption: Option | null) => {
     onChange(selectedOption?.value || '');
@@ -246,7 +300,7 @@ export function ReactSelectSearchable({
   return (
     <div className={`space-y-1 ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -257,7 +311,7 @@ export function ReactSelectSearchable({
         value={selectedOption}
         onChange={handleChange}
         placeholder={placeholder}
-        styles={getCustomStyles(isMobile)}
+        styles={getCustomStyles(isMobile, isDarkMode)}
         components={{
           DropdownIndicator: CustomDropdownIndicator,
           Menu: CustomMenu,

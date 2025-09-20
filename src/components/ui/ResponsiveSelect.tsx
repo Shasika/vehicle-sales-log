@@ -82,7 +82,7 @@ export default function ResponsiveSelect({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           {label}
         </label>
       )}
@@ -96,20 +96,20 @@ export default function ResponsiveSelect({
               <Listbox.Button
                 ref={buttonRef}
                 className={`
-                  relative w-full cursor-pointer rounded-md bg-white py-2 pl-3 pr-10
-                  text-left shadow-sm ring-1 ring-inset ring-gray-300
-                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                  disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed
-                  text-sm sm:text-base text-gray-900
-                  ${error ? 'ring-red-300 focus:ring-red-500' : 'ring-gray-300'}
+                  relative w-full cursor-pointer rounded-md bg-white dark:bg-gray-800 py-2 pl-3 pr-10
+                  text-left shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+                  disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed
+                  text-sm sm:text-base text-gray-900 dark:text-gray-100
+                  ${error ? 'ring-red-300 dark:ring-red-500 focus:ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}
                 `}
               >
-                <span className={`block truncate ${selected ? 'text-gray-900' : 'text-gray-500'}`}>
+                <span className={`block truncate ${selected ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}`}>
                   {selected ? selected.label : placeholder}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
-                    className="h-5 w-5 text-gray-400"
+                    className="h-5 w-5 text-gray-400 dark:text-gray-500"
                     aria-hidden="true"
                   />
                 </span>
@@ -123,7 +123,7 @@ export default function ResponsiveSelect({
               >
                 <Listbox.Options
                   className={`
-                    absolute z-[9999] w-full overflow-auto rounded-md bg-white py-1 text-base shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm
+                    absolute z-[9999] w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-xl ring-1 ring-black dark:ring-gray-600 ring-opacity-5 dark:ring-opacity-25 focus:outline-none sm:text-sm
                     ${dropdownPosition === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'}
                   `}
                   style={{ maxHeight: maxHeight }}
@@ -133,17 +133,17 @@ export default function ResponsiveSelect({
                       key={option.value}
                       className={({ active, selected: isSelected }) => {
                         if (option.disabled) {
-                          return 'relative cursor-not-allowed select-none py-2 pl-6 pr-4 opacity-50 text-gray-400 bg-gray-50';
+                          return 'relative cursor-not-allowed select-none py-2 pl-6 pr-4 opacity-50 text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700';
                         }
 
                         const isCurrentlySelected = selected && selected.value === option.value;
 
                         if (isCurrentlySelected) {
-                          return `relative cursor-pointer select-none py-2 pl-6 pr-4 bg-blue-600 text-white font-medium`;
+                          return `relative cursor-pointer select-none py-2 pl-6 pr-4 bg-blue-600 dark:bg-blue-700 text-white font-medium`;
                         }
 
                         return `relative cursor-pointer select-none py-2 pl-6 pr-4 ${
-                          active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'
+                          active ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-900 dark:text-blue-300' : 'text-gray-900 dark:text-gray-100'
                         }`;
                       }}
                       value={option}
@@ -162,7 +162,7 @@ export default function ResponsiveSelect({
                             </span>
                             {isCurrentlySelected ? (
                               <span className={`absolute inset-y-0 left-0 flex items-center pl-1.5 ${
-                                isCurrentlySelected ? 'text-white' : 'text-blue-600'
+                                isCurrentlySelected ? 'text-white' : 'text-blue-600 dark:text-blue-400'
                               }`}>
                                 <CheckIcon className="h-4 w-4" aria-hidden="true" />
                               </span>

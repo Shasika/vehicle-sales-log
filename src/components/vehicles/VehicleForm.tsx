@@ -10,6 +10,31 @@ import DocumentViewer from '@/components/ui/DocumentViewer';
 import Swal from 'sweetalert2';
 import { showConfirm } from '@/lib/alerts';
 
+// Function to detect if dark mode is active
+const isDarkMode = () => {
+  if (typeof window !== 'undefined') {
+    return document.documentElement.classList.contains('dark');
+  }
+  return false;
+};
+
+// Get dark mode theme configuration
+const getDarkModeConfig = () => {
+  if (!isDarkMode()) return {};
+
+  return {
+    background: '#1f2937', // gray-800
+    color: '#f9fafb', // gray-50
+    customClass: {
+      popup: 'dark-mode-popup',
+      title: 'dark-mode-title',
+      htmlContainer: 'dark-mode-html',
+      confirmButton: 'dark-mode-confirm-button',
+      cancelButton: 'dark-mode-cancel-button',
+    },
+  };
+};
+
 interface VehicleFormProps {
   vehicle?: any;
   onSubmit: (data: any) => void;
@@ -193,6 +218,7 @@ export default function VehicleForm({
         text: 'Failed to download file. Please try again.',
         icon: 'error',
         confirmButtonColor: '#dc2626',
+        ...getDarkModeConfig(),
       });
     }
   };
@@ -250,6 +276,7 @@ export default function VehicleForm({
         text: 'Registration number is required',
         icon: 'warning',
         confirmButtonColor: '#dc2626',
+        ...getDarkModeConfig(),
       });
       return;
     }
@@ -297,6 +324,7 @@ export default function VehicleForm({
         text: 'Failed to save vehicle. Please check your data and try again.',
         icon: 'error',
         confirmButtonColor: '#dc2626',
+        ...getDarkModeConfig(),
       });
     }
   };
@@ -397,18 +425,18 @@ export default function VehicleForm({
 
         {/* Images Section */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-2">
             Images
           </h3>
 
           {/* Existing Images */}
           {existingImages.length > 0 && (
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Current Images</h4>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Images</h4>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {existingImages.map((image, index) => (
                   <div key={index} className="relative group">
-                    <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden border">
+                    <div className="aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
                       <img
                         src={image.url}
                         alt={`Vehicle image ${index + 1}`}
@@ -436,14 +464,14 @@ export default function VehicleForm({
 
           {/* New Images Upload */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Add New Images
             </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md bg-gray-50 dark:bg-gray-800">
               <div className="space-y-1 text-center">
-                <Camera className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="flex text-sm text-gray-600">
-                  <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
+                <Camera className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+                <div className="flex text-sm text-gray-600 dark:text-gray-400">
+                  <label className="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
                     <span>Upload images</span>
                     <input
                       type="file"
@@ -454,16 +482,16 @@ export default function VehicleForm({
                     />
                   </label>
                 </div>
-                <p className="text-xs text-gray-500">PNG, JPG, JPEG up to 10MB each</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, JPEG up to 10MB each</p>
               </div>
             </div>
             {newImages.length > 0 && (
               <div className="mt-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Selected Images ({newImages.length})</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Selected Images ({newImages.length})</h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {newImages.map((file, index) => (
                     <div key={index} className="relative group">
-                      <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden border">
+                      <div className="aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`New image ${index + 1}`}
@@ -483,8 +511,8 @@ export default function VehicleForm({
                         <X className="h-3 w-3" />
                       </button>
                       <div className="mt-1">
-                        <p className="text-xs text-gray-500 truncate" title={file.name}>{file.name}</p>
-                        <p className="text-xs text-gray-400">{(file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate" title={file.name}>{file.name}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">{(file.size / (1024 * 1024)).toFixed(1)} MB</p>
                       </div>
                     </div>
                   ))}
@@ -496,30 +524,30 @@ export default function VehicleForm({
 
         {/* Documents Section */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-2">
             Documents
           </h3>
 
           {/* Existing Documents */}
           {existingDocuments.length > 0 && (
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Current Documents & Supporting Images</h4>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Documents & Supporting Images</h4>
               <div className="space-y-2">
                 {existingDocuments.map((doc, index) => {
                   const filename = doc.filename || `Document ${index + 1}`;
                   const isImage = isImageFile(filename);
 
                   return (
-                    <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div key={index} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                       <div className="flex items-center space-x-3">
                         {isImage ? (
-                          <Image className="h-5 w-5 text-blue-500" />
+                          <Image className="h-5 w-5 text-blue-500 dark:text-blue-400" />
                         ) : (
-                          <FileText className="h-5 w-5 text-gray-400" />
+                          <FileText className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                         )}
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium text-gray-700">{filename}</span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{filename}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
                             {isImage ? 'Supporting Image' : 'Document'}
                             {doc.type && doc.type !== 'Other' && ` • ${doc.type}`}
                           </span>
@@ -560,17 +588,17 @@ export default function VehicleForm({
 
           {/* New Documents Upload */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Add Supporting Documents & Images
             </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md bg-gray-50 dark:bg-gray-800">
               <div className="space-y-1 text-center">
                 <div className="flex items-center justify-center space-x-2">
-                  <FileText className="h-8 w-8 text-gray-400" />
-                  <Image className="h-8 w-8 text-gray-400" />
+                  <FileText className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+                  <Image className="h-8 w-8 text-gray-400 dark:text-gray-500" />
                 </div>
-                <div className="flex text-sm text-gray-600">
-                  <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
+                <div className="flex text-sm text-gray-600 dark:text-gray-400">
+                  <label className="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
                     <span>Upload documents & images</span>
                     <input
                       type="file"
@@ -581,25 +609,25 @@ export default function VehicleForm({
                     />
                   </label>
                 </div>
-                <p className="text-xs text-gray-500">Documents: PDF, DOC, DOCX, TXT</p>
-                <p className="text-xs text-gray-500">Images: JPG, PNG, GIF, BMP, WEBP</p>
-                <p className="text-xs text-gray-400">Up to 10MB each</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Documents: PDF, DOC, DOCX, TXT</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Images: JPG, PNG, GIF, BMP, WEBP</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">Up to 10MB each</p>
               </div>
             </div>
             {newDocuments.length > 0 && (
               <div className="mt-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Selected Files ({newDocuments.length})</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Selected Files ({newDocuments.length})</h4>
                 <div className="space-y-2">
                   {newDocuments.map((file, index) => {
                     const isImage = isImageFile(file.name);
 
                     return (
-                      <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                      <div key={index} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                         <div className="flex items-center space-x-3">
                           {isImage ? (
                             <div className="flex items-center space-x-2">
-                              <Image className="h-5 w-5 text-blue-500" />
-                              <div className="w-10 h-10 bg-gray-100 rounded border overflow-hidden">
+                              <Image className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+                              <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 overflow-hidden">
                                 <img
                                   src={URL.createObjectURL(file)}
                                   alt={file.name}
@@ -608,11 +636,11 @@ export default function VehicleForm({
                               </div>
                             </div>
                           ) : (
-                            <FileText className="h-5 w-5 text-gray-400" />
+                            <FileText className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                           )}
                           <div className="flex flex-col">
-                            <span className="text-sm font-medium text-gray-700">{file.name}</span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{file.name}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                               {isImage ? 'Supporting Image' : 'Document'} • {(file.size / (1024 * 1024)).toFixed(1)} MB
                             </span>
                           </div>
@@ -636,7 +664,7 @@ export default function VehicleForm({
 
         {/* Form Actions */}
         {showActions && (
-          <div className="flex justify-end space-x-3 pt-6 border-t">
+          <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
             <Button
               type="button"
               variant="secondary"

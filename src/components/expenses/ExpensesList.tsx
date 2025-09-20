@@ -38,11 +38,11 @@ interface Expense {
 }
 
 const categoryColors = {
-  'Repair': 'bg-red-100 text-red-800',
-  'Service': 'bg-blue-100 text-blue-800',
-  'Transport': 'bg-green-100 text-green-800',
-  'Commission': 'bg-yellow-100 text-yellow-800',
-  'Other': 'bg-gray-100 text-gray-800'
+  'Repair': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+  'Service': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  'Transport': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  'Commission': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  'Other': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
 };
 
 export default function ExpensesList() {
@@ -181,13 +181,13 @@ export default function ExpensesList() {
     return (
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm animate-pulse">
+          <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
             <div className="flex justify-between items-start">
               <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-48"></div>
-                <div className="h-3 bg-gray-200 rounded w-32"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
               </div>
-              <div className="h-6 bg-gray-200 rounded w-20"></div>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
             </div>
           </div>
         ))}
@@ -198,7 +198,7 @@ export default function ExpensesList() {
   return (
     <div className="space-y-6">
       {/* Filter and Sort Controls */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="p-4 lg:p-6">
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
             {/* Filter Controls */}
@@ -243,12 +243,12 @@ export default function ExpensesList() {
             {/* Summary Stats */}
             <div className="flex justify-end">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-                <div className="text-gray-600">
-                  Showing <span className="font-semibold text-gray-900">{totalItems}</span> expense{totalItems !== 1 ? 's' : ''} total
+                <div className="text-gray-600 dark:text-gray-300">
+                  Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{totalItems}</span> expense{totalItems !== 1 ? 's' : ''} total
                 </div>
-                <div className="text-gray-400 hidden sm:block">•</div>
-                <div className="text-gray-600">
-                  Page: <span className="font-semibold text-gray-900">{filteredExpenses.length}</span> result{filteredExpenses.length !== 1 ? 's' : ''}
+                <div className="text-gray-400 dark:text-gray-500 hidden sm:block">•</div>
+                <div className="text-gray-600 dark:text-gray-300">
+                  Page: <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredExpenses.length}</span> result{filteredExpenses.length !== 1 ? 's' : ''}
                 </div>
               </div>
             </div>
@@ -263,13 +263,13 @@ export default function ExpensesList() {
           const total = categoryExpenses.reduce((sum, e) => sum + e.amount, 0);
           
           return (
-            <div key={category} className="bg-white rounded-lg border border-gray-200 p-4">
+            <div key={category} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
               <div className="text-center">
-                <p className="text-sm text-gray-600">{category}</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-sm text-gray-600 dark:text-gray-300">{category}</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {formatCurrencyWithRs(total)}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   {categoryExpenses.length} expense{categoryExpenses.length !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -280,10 +280,10 @@ export default function ExpensesList() {
 
       {/* Expenses List */}
       {filteredExpenses.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <Receipt className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No expenses</h3>
-          <p className="mt-1 text-sm text-gray-500">
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+          <Receipt className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No expenses</h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {filter === 'all' ? 'Get started by adding a new expense.' : `No ${filter.toLowerCase()} expenses found.`}
           </p>
         </div>
@@ -293,7 +293,7 @@ export default function ExpensesList() {
             const payeeName = expense.payeeId?.fullName || expense.payeeId?.businessName;
             
             return (
-              <div key={(expense as any)._id || expense.id} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div key={(expense as any)._id || expense.id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md dark:hover:shadow-lg transition-shadow">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
@@ -301,17 +301,17 @@ export default function ExpensesList() {
                         {expense.category}
                       </span>
                       
-                      <span className="text-lg font-semibold text-gray-900">
+                      <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {formatCurrencyWithRs(expense.amount)}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <h3 className="font-medium text-gray-900 mb-1">
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">
                           {expense.description}
                         </h3>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
                           <Calendar className="h-4 w-4" />
                           <span>{format(new Date(expense.date), 'MMM dd, yyyy')}</span>
                         </div>
@@ -319,12 +319,12 @@ export default function ExpensesList() {
 
                       {expense.vehicleId && (
                         <div className="flex items-start space-x-3">
-                          <Car className="h-5 w-5 text-gray-400 mt-0.5" />
+                          <Car className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5" />
                           <div>
-                            <p className="font-medium text-gray-900">
+                            <p className="font-medium text-gray-900 dark:text-gray-100">
                               {expense.vehicleId.registrationNumber}
                             </p>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-gray-300">
                               {expense.vehicleId.make} {expense.vehicleId.vehicleModel}
                             </p>
                           </div>
@@ -333,20 +333,20 @@ export default function ExpensesList() {
 
                       {payeeName && (
                         <div className="flex items-start space-x-3">
-                          <User className="h-5 w-5 text-gray-400 mt-0.5" />
+                          <User className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5" />
                           <div>
-                            <p className="font-medium text-gray-900">{payeeName}</p>
-                            <p className="text-sm text-gray-600 capitalize">{expense.payeeId?.type}</p>
+                            <p className="font-medium text-gray-900 dark:text-gray-100">{payeeName}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 capitalize">{expense.payeeId?.type}</p>
                           </div>
                         </div>
                       )}
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-gray-200">
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-4">
                           {expense.attachments.length > 0 && (
-                            <div className="flex items-center space-x-1 text-sm text-blue-600">
+                            <div className="flex items-center space-x-1 text-sm text-blue-600 dark:text-blue-400">
                               <FileText className="h-4 w-4" />
                               <span>{expense.attachments.length} attachment{expense.attachments.length !== 1 ? 's' : ''}</span>
                             </div>
@@ -362,11 +362,11 @@ export default function ExpensesList() {
                             <Edit className="h-4 w-4 mr-1" />
                             Edit
                           </Button>
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
                             onClick={() => handleDelete((expense as any)._id || expense.id, expense.description)}
-                            className="text-red-600 hover:text-red-800"
+                            className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

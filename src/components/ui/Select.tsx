@@ -91,14 +91,14 @@ export default function Select({
 
   // Default to native select behavior for backward compatibility
   if (!smartDropdown) {
-    const selectClass = `w-full pl-3 pr-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 text-sm cursor-pointer ${
-      error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+    const selectClass = `w-full pl-3 pr-3 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400 text-sm cursor-pointer ${
+      error ? 'border-red-300 dark:border-red-500 focus:border-red-500 focus:ring-red-500' : ''
     } ${className}`;
 
     return (
       <div className="space-y-1">
         {label && (
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
             {props.required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -172,7 +172,7 @@ export default function Select({
   return (
     <div className="space-y-1 smart-dropdown-container">
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
           {props.required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -184,11 +184,11 @@ export default function Select({
           disabled={props.disabled}
           className={`
             w-full flex items-center justify-between px-3 py-2.5 text-sm text-left
-            border border-gray-300 rounded-md bg-white hover:bg-gray-50
-            text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-            disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed
-            ${error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}
-            ${isOpen ? 'ring-2 ring-blue-500 border-blue-500' : ''}
+            border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700
+            text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400
+            disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed
+            ${error ? 'border-red-300 dark:border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
+            ${isOpen ? 'ring-2 ring-blue-500 dark:ring-blue-400 border-blue-500 dark:border-blue-400' : ''}
             ${className}
           `}
           aria-haspopup="listbox"
@@ -198,7 +198,7 @@ export default function Select({
             {selectedOption ? selectedOption.label : (props.placeholder || 'Select an option')}
           </span>
           <ChevronDown
-            className={`h-4 w-4 text-gray-400 transition-transform flex-shrink-0 ${
+            className={`h-4 w-4 text-gray-400 dark:text-gray-500 transition-transform flex-shrink-0 ${
               isOpen ? 'transform rotate-180' : ''
             }`}
           />
@@ -208,16 +208,16 @@ export default function Select({
           <>
             {/* Backdrop to close dropdown when clicked outside */}
             <div
-              className={useMobileSheet ? "fixed inset-0 z-[110] bg-black/25" : "fixed inset-0 z-[65]"}
+              className={useMobileSheet ? "fixed inset-0 z-[110] bg-black/25 dark:bg-black/40" : "fixed inset-0 z-[65]"}
               onClick={() => setIsOpen(false)}
             />
 {useMobileSheet ? (
               /* Mobile Bottom Sheet */
-              <div className="fixed bottom-0 left-0 right-0 z-[120] bg-white rounded-t-xl shadow-2xl max-h-[70vh] flex flex-col">
+              <div className="fixed bottom-0 left-0 right-0 z-[120] bg-white dark:bg-gray-800 rounded-t-xl shadow-2xl max-h-[70vh] flex flex-col">
                 {/* Sheet Handle */}
-                <div className="p-4 border-b border-gray-200">
-                  <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-3"></div>
-                  <h3 className="text-lg font-medium text-center text-gray-900">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-3"></div>
+                  <h3 className="text-lg font-medium text-center text-gray-900 dark:text-gray-100">
                     {label || 'Select Option'}
                   </h3>
                 </div>
@@ -232,8 +232,8 @@ export default function Select({
                       className={`
                         w-full px-6 py-4 text-left text-base transition-colors
                         ${props.value === option.value
-                          ? 'bg-blue-50 text-blue-600 font-medium border-r-4 border-blue-600'
-                          : 'text-gray-900 hover:bg-gray-50'
+                          ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-medium border-r-4 border-blue-600 dark:border-blue-400'
+                          : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
                         }
                       `}
                     >
@@ -245,7 +245,7 @@ export default function Select({
             ) : (
               /* Desktop Dropdown */
               <div className={`
-                absolute z-[70] w-full bg-white border border-gray-300 rounded-md shadow-lg
+                absolute z-[70] w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg
                 overflow-y-auto overflow-x-hidden
                 ${
                   dropdownPosition === 'top'
@@ -264,13 +264,13 @@ export default function Select({
                     type="button"
                     onClick={() => handleSelect(option.value)}
                     className={`
-                      w-full px-3 py-2 text-sm text-left hover:bg-gray-100 transition-colors
+                      w-full px-3 py-2 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors
                       ${props.value === option.value
-                        ? 'bg-blue-50 text-blue-600 font-medium'
-                        : 'text-gray-900'
+                        ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-medium'
+                        : 'text-gray-900 dark:text-gray-100'
                       }
                       first:rounded-t-md last:rounded-b-md
-                      focus:outline-none focus:bg-gray-100
+                      focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700
                       min-h-[40px] flex items-center
                     `}
                     role="option"

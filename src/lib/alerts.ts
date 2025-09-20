@@ -1,5 +1,30 @@
 import Swal from 'sweetalert2';
 
+// Function to detect if dark mode is active
+const isDarkMode = () => {
+  if (typeof window !== 'undefined') {
+    return document.documentElement.classList.contains('dark');
+  }
+  return false;
+};
+
+// Get dark mode theme configuration
+const getDarkModeConfig = () => {
+  if (!isDarkMode()) return {};
+
+  return {
+    background: '#1f2937', // gray-800
+    color: '#f9fafb', // gray-50
+    customClass: {
+      popup: 'dark-mode-popup',
+      title: 'dark-mode-title',
+      htmlContainer: 'dark-mode-html',
+      confirmButton: 'dark-mode-confirm-button',
+      cancelButton: 'dark-mode-cancel-button',
+    },
+  };
+};
+
 export const showSuccess = async (title: string, text?: string, timer = 2000) => {
   return await Swal.fire({
     title,
@@ -8,6 +33,7 @@ export const showSuccess = async (title: string, text?: string, timer = 2000) =>
     confirmButtonColor: '#059669',
     timer,
     timerProgressBar: true,
+    ...getDarkModeConfig(),
   });
 };
 
@@ -17,6 +43,7 @@ export const showError = async (title: string, text?: string) => {
     text,
     icon: 'error',
     confirmButtonColor: '#dc2626',
+    ...getDarkModeConfig(),
   });
 };
 
@@ -26,6 +53,7 @@ export const showWarning = async (title: string, text?: string) => {
     text,
     icon: 'warning',
     confirmButtonColor: '#dc2626',
+    ...getDarkModeConfig(),
   });
 };
 
@@ -40,6 +68,7 @@ export const showConfirm = async (title: string, html?: string, confirmText = 'Y
     confirmButtonText: confirmText,
     cancelButtonText: 'Cancel',
     focusCancel: true,
+    ...getDarkModeConfig(),
   });
 };
 
@@ -49,6 +78,7 @@ export const showInfo = async (title: string, text?: string) => {
     text,
     icon: 'info',
     confirmButtonColor: '#3b82f6',
+    ...getDarkModeConfig(),
   });
 };
 
@@ -59,7 +89,8 @@ export const showLoading = (title = 'Loading...') => {
     allowOutsideClick: false,
     didOpen: () => {
       Swal.showLoading();
-    }
+    },
+    ...getDarkModeConfig(),
   });
 };
 

@@ -222,7 +222,7 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
         type="submit"
         form="expense-form"
         disabled={loading}
-        className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 sm:ml-3 sm:w-auto"
+        className="inline-flex w-full justify-center rounded-md bg-blue-600 dark:bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-400 disabled:opacity-50 sm:ml-3 sm:w-auto"
       >
         {loading ? 'Saving...' : expense ? 'Update Expense' : 'Add Expense'}
       </button>
@@ -230,7 +230,7 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
         type="button"
         onClick={onClose}
         disabled={loading}
-        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 sm:mt-0 sm:w-auto"
+        className="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 sm:mt-0 sm:w-auto"
       >
         Cancel
       </button>
@@ -338,7 +338,7 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
           {/* Attachments Upload */}
           <div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 space-y-2 sm:space-y-0">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Attachments (Receipts, Invoices)
               </label>
               <Button type="button" size="sm" variant="outline" onClick={addAttachment} className="w-full sm:w-auto">
@@ -349,16 +349,16 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
             
             <div className="space-y-4">
               {attachments.map((attachment, index) => (
-                <div key={index} className="border border-gray-300 rounded-lg p-4">
+                <div key={index} className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Document Type
                       </label>
                       <select
                         value={attachment.type}
                         onChange={(e) => updateAttachment(index, 'type', e.target.value)}
-                        className="w-full px-3 py-2.5 text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm appearance-none cursor-pointer"
+                        className="w-full px-3 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 text-sm appearance-none cursor-pointer"
                       >
                         <option value="Receipt">Receipt</option>
                         <option value="Invoice">Invoice</option>
@@ -368,7 +368,7 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
                     </div>
                     
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Caption/Description
                       </label>
                       <ResponsiveInput
@@ -381,20 +381,20 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
                     
                     <div className="flex flex-col sm:items-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
                       <div className="flex-1">
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                           File
                         </label>
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
                           onChange={(e) => handleAttachmentFileChange(index, e.target.files?.[0] || null)}
-                          className="w-full text-sm bg-white border border-gray-300 rounded-md px-2 py-1.5"
+                          className="w-full text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1.5 text-gray-900 dark:text-gray-100"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => removeAttachment(index)}
-                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md self-start sm:self-end flex-shrink-0"
+                        className="p-2 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900 rounded-md self-start sm:self-end flex-shrink-0"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -402,10 +402,10 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
                   </div>
                   
                   {attachment.file && (
-                    <div className="mt-2 p-2 bg-gray-50 rounded flex items-center space-x-2">
-                      <FileText className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-600">{attachment.file.name}</span>
-                      <span className="text-xs text-gray-500">
+                    <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded flex items-center space-x-2">
+                      <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                      <span className="text-sm text-gray-600 dark:text-gray-300">{attachment.file.name}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         ({(attachment.file.size / 1024 / 1024).toFixed(2)} MB)
                       </span>
                     </div>
@@ -414,8 +414,8 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
               ))}
               
               {attachments.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  <FileText className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <FileText className="mx-auto h-8 w-8 text-gray-400 dark:text-gray-500 mb-2" />
                   <p className="text-sm">No attachments added</p>
                   <p className="text-xs">Click "Add Attachment" to upload supporting files</p>
                 </div>

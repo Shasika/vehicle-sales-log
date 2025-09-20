@@ -175,7 +175,7 @@ export default function PersonEditForm({ person }: PersonEditFormProps) {
 
       {/* Phone Numbers */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Phone Numbers *
         </label>
         <div className="space-y-2">
@@ -195,7 +195,7 @@ export default function PersonEditForm({ person }: PersonEditFormProps) {
                   variant="outline"
                   size="sm"
                   onClick={() => removePhoneNumber(index)}
-                  className="text-red-600 border-red-300 hover:bg-red-50"
+                  className="text-red-600 dark:text-red-400 border-red-300 dark:border-red-600 hover:bg-red-50 dark:hover:bg-red-900"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -217,7 +217,7 @@ export default function PersonEditForm({ person }: PersonEditFormProps) {
 
       {/* Address */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Address
         </label>
         <Textarea
@@ -230,23 +230,23 @@ export default function PersonEditForm({ person }: PersonEditFormProps) {
       </div>
 
       {/* Blacklist Status */}
-      <div className="border border-gray-200 rounded-lg p-4">
+      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
         <div className="flex items-center mb-3">
           <input
             type="checkbox"
             name="isBlacklisted"
             checked={formData.isBlacklisted}
             onChange={handleInputChange}
-            className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+            className="h-4 w-4 text-red-600 dark:text-red-500 focus:ring-red-500 dark:focus:ring-red-400 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
           />
-          <label className="ml-2 text-sm font-medium text-gray-700">
+          <label className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
             Mark as blacklisted
           </label>
         </div>
         
         {formData.isBlacklisted && (
           <div>
-            <label className="block text-sm font-medium text-red-700 mb-1">
+            <label className="block text-sm font-medium text-red-700 dark:text-red-400 mb-1">
               Risk Notes
             </label>
             <Textarea
@@ -263,7 +263,7 @@ export default function PersonEditForm({ person }: PersonEditFormProps) {
 
       {/* Notes */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Notes
         </label>
         <Textarea
@@ -277,11 +277,11 @@ export default function PersonEditForm({ person }: PersonEditFormProps) {
       </div>
 
       {/* Form Actions */}
-      <div className="flex space-x-4 pt-6 border-t border-gray-200">
+      <div className="flex space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
         <Button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-400"
         >
           {loading ? 'Updating...' : 'Update Person'}
         </Button>

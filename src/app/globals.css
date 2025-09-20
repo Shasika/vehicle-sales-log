@@ -255,3 +255,112 @@ body {
     .text-mobile-xs { font-size: 0.75rem !important; }
   }
 }
+
+/* SweetAlert2 Dark Mode Support */
+.dark-mode-popup {
+  background-color: #1f2937 !important; /* gray-800 */
+  color: #f9fafb !important; /* gray-50 */
+  border: 1px solid #374151 !important; /* gray-700 */
+}
+
+.dark-mode-title {
+  color: #f9fafb !important; /* gray-50 */
+}
+
+.dark-mode-html {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+.dark-mode-confirm-button {
+  background-color: #dc2626 !important; /* Keep button colors as they are for accessibility */
+}
+
+.dark-mode-cancel-button {
+  background-color: #6b7280 !important; /* gray-500 */
+  border: 1px solid #4b5563 !important; /* gray-600 */
+  color: #f9fafb !important; /* gray-50 */
+}
+
+/* Additional dark mode overrides for SweetAlert2 */
+.swal2-popup.dark-mode-popup .swal2-icon {
+  border-color: #374151 !important; /* gray-700 */
+}
+
+.swal2-popup.dark-mode-popup .swal2-icon.swal2-success .swal2-success-ring {
+  border-color: #10b981 !important; /* emerald-500 */
+}
+
+.swal2-popup.dark-mode-popup .swal2-icon.swal2-success .swal2-success-fix {
+  background-color: #1f2937 !important; /* gray-800 */
+}
+
+.swal2-popup.dark-mode-popup .swal2-icon.swal2-error .swal2-error-line {
+  background-color: #ef4444 !important; /* red-500 */
+}
+
+.swal2-popup.dark-mode-popup .swal2-icon.swal2-warning {
+  border-color: #f59e0b !important; /* amber-500 */
+  color: #f59e0b !important;
+}
+
+.swal2-popup.dark-mode-popup .swal2-icon.swal2-info {
+  border-color: #3b82f6 !important; /* blue-500 */
+  color: #3b82f6 !important;
+}
+
+.swal2-popup.dark-mode-popup .swal2-icon.swal2-question {
+  border-color: #8b5cf6 !important; /* violet-500 */
+  color: #8b5cf6 !important;
+}
+
+/* Timer progress bar dark mode */
+.swal2-popup.dark-mode-popup .swal2-timer-progress-bar {
+  background: rgba(16, 185, 129, 0.8) !important; /* emerald-500 with opacity */
+}
+
+/* Loading spinner dark mode */
+.swal2-popup.dark-mode-popup .swal2-loader {
+  border-color: #374151 #374151 #374151 #f9fafb !important; /* gray-700 and gray-50 */
+}
+
+/* Custom scrollbar styles for dark mode */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6; /* light mode: gray-300 thumb, gray-100 track */
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: #4b5563 #1f2937; /* dark mode: gray-600 thumb, gray-800 track */
+}
+
+/* Webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f3f4f6; /* gray-100 */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db; /* gray-300 */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af; /* gray-400 */
+}
+
+/* Dark mode webkit scrollbar */
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #1f2937; /* gray-800 */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563; /* gray-600 */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* gray-500 */
+}

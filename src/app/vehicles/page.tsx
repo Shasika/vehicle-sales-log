@@ -18,10 +18,10 @@ export default async function VehiclesPage() {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                 Vehicle Inventory 🚗
               </h1>
-              <p className="mt-2 text-sm sm:text-base text-gray-600">
+              <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                 Manage and track your complete vehicle inventory with detailed information.
               </p>
             </div>
@@ -35,15 +35,15 @@ export default async function VehiclesPage() {
         <Suspense fallback={
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm animate-pulse">
-                <div className="h-32 bg-gray-200 rounded-lg mb-4"></div>
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm animate-pulse">
+                <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
                 <div className="space-y-3">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="h-8 bg-gray-200 rounded w-full"></div>
+                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
                 </div>
               </div>
             ))}

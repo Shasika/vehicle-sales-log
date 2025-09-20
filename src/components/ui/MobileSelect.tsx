@@ -46,17 +46,17 @@ export default function MobileSelect({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-3 pr-10 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium text-gray-700 hover:border-gray-300 transition-all duration-200 shadow-sm text-left appearance-none cursor-pointer"
+          className="w-full px-4 py-3 pr-10 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-200 shadow-sm text-left appearance-none cursor-pointer"
         >
           {selectedOption?.label || 'Select option'}
-          <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {isOpen && (
           <>
             {/* Backdrop */}
             <div
-              className="fixed bg-black bg-opacity-25"
+              className="fixed bg-black bg-opacity-25 dark:bg-black dark:bg-opacity-40"
               style={{
                 top: '60px',
                 left: '0',
@@ -69,7 +69,7 @@ export default function MobileSelect({
 
             {/* Dropdown positioned at bottom of modal area */}
             <div
-              className="fixed left-4 right-4 bg-white rounded-xl shadow-2xl flex flex-col"
+              className="fixed left-4 right-4 bg-white dark:bg-gray-800 rounded-xl shadow-2xl flex flex-col"
               style={{
                 bottom: '90px', // Above mobile navigation + margin
                 maxHeight: '50vh',
@@ -78,9 +78,9 @@ export default function MobileSelect({
               }}
             >
               {/* Header - Fixed */}
-              <div className="flex-shrink-0 p-4 border-b border-gray-200">
-                <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-3"></div>
-                <h3 className="text-lg font-medium text-center">Select Option</h3>
+              <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-3"></div>
+                <h3 className="text-lg font-medium text-center text-gray-900 dark:text-gray-100">Select Option</h3>
               </div>
 
               {/* Scrollable Options Container */}
@@ -96,9 +96,9 @@ export default function MobileSelect({
                         onChange(option.value);
                         setIsOpen(false);
                       }}
-                      className={`w-full px-4 py-3 text-left hover:bg-gray-100 active:bg-gray-200 transition-colors text-base border-none ${
-                        value === option.value ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-900'
-                      } ${index === 0 ? '' : 'border-t border-gray-100'}`}
+                      className={`w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 transition-colors text-base border-none ${
+                        value === option.value ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-900 dark:text-gray-100'
+                      } ${index === 0 ? '' : 'border-t border-gray-100 dark:border-gray-700'}`}
                     >
                       {option.label}
                     </button>
@@ -122,7 +122,7 @@ export default function MobileSelect({
         ref={selectRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 pr-10 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium text-gray-700 hover:border-gray-300 transition-all duration-200 shadow-sm appearance-none cursor-pointer"
+        className="w-full px-4 py-3 pr-10 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-200 shadow-sm appearance-none cursor-pointer"
         style={{
           fontSize: isMobile ? '16px' : '14px' // Prevent zoom on iOS
         }}
@@ -134,7 +134,7 @@ export default function MobileSelect({
         ))}
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-        <ChevronDown className="h-5 w-5 text-gray-400" />
+        <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500" />
       </div>
     </div>
   );

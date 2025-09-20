@@ -111,7 +111,7 @@ export default function MobileDatePicker({
     return (
       <div className={`space-y-1 ${className}`}>
         {label && (
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -121,11 +121,11 @@ export default function MobileDatePicker({
             type="date"
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium text-gray-700 hover:border-gray-300 transition-all duration-200 shadow-sm cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="w-full px-4 py-3 pr-12 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-200 shadow-sm cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             required={required}
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <Calendar className="h-5 w-5 text-gray-400" />
+            <Calendar className="h-5 w-5 text-gray-400 dark:text-gray-500" />
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default function MobileDatePicker({
   return (
     <div className={`space-y-1 ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -145,13 +145,13 @@ export default function MobileDatePicker({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium text-gray-700 hover:border-gray-300 transition-all duration-200 shadow-sm text-left appearance-none cursor-pointer relative"
+        className="w-full px-4 py-3 pr-12 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-200 shadow-sm text-left appearance-none cursor-pointer relative"
       >
-        <span className={`block pr-6 ${value ? 'text-gray-900' : 'text-gray-500'}`}>
+        <span className={`block pr-6 ${value ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}`}>
           {formatDisplayDate(value)}
         </span>
         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-          <Calendar className="h-5 w-5 text-gray-400" />
+          <Calendar className="h-5 w-5 text-gray-400 dark:text-gray-500" />
         </div>
       </button>
 
@@ -159,15 +159,15 @@ export default function MobileDatePicker({
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 z-40 bg-black bg-opacity-25"
+            className="fixed inset-0 z-40 bg-black bg-opacity-25 dark:bg-opacity-50"
             onClick={() => setIsOpen(false)}
           />
 
           {/* Bottom Sheet Calendar */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-xl shadow-2xl max-h-[80vh] overflow-y-auto">
-            <div className="p-4 border-b border-gray-200">
-              <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-3"></div>
-              <h3 className="text-lg font-medium text-center text-gray-900">Select Date</h3>
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 rounded-t-xl shadow-2xl max-h-[80vh] overflow-y-auto">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-600">
+              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-3"></div>
+              <h3 className="text-lg font-medium text-center text-gray-900 dark:text-gray-100">Select Date</h3>
             </div>
 
             <div className="p-4">
@@ -175,7 +175,7 @@ export default function MobileDatePicker({
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={() => navigateMonth('prev')}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-700"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors text-gray-700 dark:text-gray-300"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
@@ -185,13 +185,13 @@ export default function MobileDatePicker({
                     const today = new Date();
                     setCurrentMonth(today);
                   }}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
+                  className="text-lg font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
                 >
                   {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                 </button>
                 <button
                   onClick={() => navigateMonth('next')}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-700"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors text-gray-700 dark:text-gray-300"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
@@ -200,7 +200,7 @@ export default function MobileDatePicker({
               {/* Weekday Headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                  <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                  <div key={day} className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2">
                     {day}
                   </div>
                 ))}
@@ -215,12 +215,12 @@ export default function MobileDatePicker({
                     className={`
                       aspect-square flex items-center justify-center text-sm rounded-lg transition-colors
                       ${isSelected(date)
-                        ? 'bg-blue-600 text-white font-medium'
+                        ? 'bg-blue-600 dark:bg-blue-500 text-white font-medium'
                         : isToday(date)
-                        ? 'bg-blue-100 text-blue-600 font-medium'
+                        ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-medium'
                         : isCurrentMonth(date)
-                        ? 'text-gray-900 hover:bg-gray-100'
-                        : 'text-gray-400 hover:bg-gray-50'
+                        ? 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        : 'text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                       }
                     `}
                   >
@@ -230,16 +230,16 @@ export default function MobileDatePicker({
               </div>
 
               {/* Quick Actions */}
-              <div className="mt-4 pt-4 border-t border-gray-200 flex gap-2">
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600 flex gap-2">
                 <button
                   onClick={() => handleDateSelect(new Date())}
-                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   Today
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                 >
                   Done
                 </button>

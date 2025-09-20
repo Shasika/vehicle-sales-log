@@ -9,6 +9,31 @@ import ResponsiveSelect from '@/components/ui/ResponsiveSelect';
 import Textarea from '@/components/ui/Textarea';
 import { formatCurrencyWithRs } from '@/lib/currency';
 import Swal from 'sweetalert2';
+
+// Function to detect if dark mode is active
+const isDarkMode = () => {
+  if (typeof window !== 'undefined') {
+    return document.documentElement.classList.contains('dark');
+  }
+  return false;
+};
+
+// Get dark mode theme configuration
+const getDarkModeConfig = () => {
+  if (!isDarkMode()) return {};
+
+  return {
+    background: '#1f2937', // gray-800
+    color: '#f9fafb', // gray-50
+    customClass: {
+      popup: 'dark-mode-popup',
+      title: 'dark-mode-title',
+      htmlContainer: 'dark-mode-html',
+      confirmButton: 'dark-mode-confirm-button',
+      cancelButton: 'dark-mode-cancel-button',
+    },
+  };
+};
 import { showSaveSuccess } from '@/lib/alerts';
 
 interface TransactionModalProps {
@@ -233,6 +258,7 @@ export default function TransactionModal({ isOpen, onClose, title, transaction, 
           confirmButtonText: 'OK',
           allowOutsideClick: false,
           allowEscapeKey: false,
+          ...getDarkModeConfig(),
         });
 
         if (onSuccess) {
@@ -258,6 +284,7 @@ export default function TransactionModal({ isOpen, onClose, title, transaction, 
           text: errorData.error || `Failed to ${transaction ? 'update' : 'create'} transaction`,
           icon: 'error',
           confirmButtonColor: '#dc2626',
+          ...getDarkModeConfig(),
         });
       }
     } catch (error) {
@@ -268,6 +295,7 @@ export default function TransactionModal({ isOpen, onClose, title, transaction, 
         text: 'Failed to save transaction. Please try again.',
         icon: 'error',
         confirmButtonColor: '#dc2626',
+        ...getDarkModeConfig(),
       });
     }
   };
@@ -278,7 +306,7 @@ export default function TransactionModal({ isOpen, onClose, title, transaction, 
         type="submit"
         form="transaction-form"
         disabled={loading}
-        className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 sm:ml-3 sm:w-auto"
+        className="inline-flex w-full justify-center rounded-md bg-blue-600 dark:bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-400 disabled:opacity-50 sm:ml-3 sm:w-auto"
       >
         {loading ? 'Saving...' : transaction ? 'Update Transaction' : 'Create Transaction'}
       </button>
@@ -286,7 +314,7 @@ export default function TransactionModal({ isOpen, onClose, title, transaction, 
         type="button"
         onClick={onClose}
         disabled={loading}
-        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 sm:mt-0 sm:w-auto"
+        className="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 sm:mt-0 sm:w-auto"
       >
         Cancel
       </button>
@@ -377,9 +405,9 @@ export default function TransactionModal({ isOpen, onClose, title, transaction, 
           </div>
 
           {/* Total Display */}
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="text-right">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                 Total: {formatCurrencyWithRs(calculateTotal())}
               </div>
             </div>

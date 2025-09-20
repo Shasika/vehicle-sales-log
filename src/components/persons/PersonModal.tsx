@@ -9,6 +9,31 @@ import Textarea from '@/components/ui/Textarea';
 import ResponsiveModal from '@/components/ui/ResponsiveModal';
 import Swal from 'sweetalert2';
 
+// Function to detect if dark mode is active
+const isDarkMode = () => {
+  if (typeof window !== 'undefined') {
+    return document.documentElement.classList.contains('dark');
+  }
+  return false;
+};
+
+// Get dark mode theme configuration
+const getDarkModeConfig = () => {
+  if (!isDarkMode()) return {};
+
+  return {
+    background: '#1f2937', // gray-800
+    color: '#f9fafb', // gray-50
+    customClass: {
+      popup: 'dark-mode-popup',
+      title: 'dark-mode-title',
+      htmlContainer: 'dark-mode-html',
+      confirmButton: 'dark-mode-confirm-button',
+      cancelButton: 'dark-mode-cancel-button',
+    },
+  };
+};
+
 interface PersonModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -143,6 +168,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
           confirmButtonColor: '#059669',
           timer: 2000,
           timerProgressBar: true,
+          ...getDarkModeConfig(),
         });
         onClose();
         window.location.reload(); // Refresh to show new data
@@ -153,6 +179,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
           text: error.message || 'Failed to save person',
           icon: 'error',
           confirmButtonColor: '#dc2626',
+          ...getDarkModeConfig(),
         });
       }
     } catch (error) {
@@ -162,6 +189,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
         text: 'Failed to save person',
         icon: 'error',
         confirmButtonColor: '#dc2626',
+        ...getDarkModeConfig(),
       });
     } finally {
       setLoading(false);
@@ -174,7 +202,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
         type="submit"
         form="person-form"
         disabled={loading}
-        className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 sm:ml-3 sm:w-auto"
+        className="inline-flex w-full justify-center rounded-md bg-blue-600 dark:bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-400 disabled:opacity-50 sm:ml-3 sm:w-auto"
       >
         {loading ? 'Saving...' : person ? 'Update Person' : 'Add Person'}
       </button>
@@ -182,7 +210,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
         type="button"
         onClick={onClose}
         disabled={loading}
-        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 sm:mt-0 sm:w-auto"
+        className="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 sm:mt-0 sm:w-auto"
       >
         Cancel
       </button>
@@ -258,7 +286,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
         {/* Phone Numbers */}
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 space-y-2 sm:space-y-0">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Phone Numbers *
             </label>
             <Button type="button" size="sm" variant="outline" onClick={addPhone} className="w-full sm:w-auto">
@@ -282,7 +310,7 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
                   <button
                     type="button"
                     onClick={() => removePhone(index)}
-                    className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md self-start sm:self-center"
+                    className="p-2 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900 rounded-md self-start sm:self-center"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -319,13 +347,13 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
               id="isBlacklisted"
               checked={formData.isBlacklisted}
               onChange={(e) => setFormData({ ...formData, isBlacklisted: e.target.checked })}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              className="mt-1 h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 shadow-sm focus:border-blue-300 dark:focus:border-blue-400 focus:ring focus:ring-blue-200 dark:focus:ring-blue-800 focus:ring-opacity-50 bg-white dark:bg-gray-800"
             />
             <div className="flex-1">
-              <label htmlFor="isBlacklisted" className="text-sm font-medium text-gray-700">
+              <label htmlFor="isBlacklisted" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Blacklist this person (high risk)
               </label>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Mark this person as high risk to prevent future transactions
               </p>
             </div>
@@ -353,12 +381,12 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
 
         {/* Image Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Profile Images
           </label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 bg-gray-50 dark:bg-gray-800">
             <div className="text-center">
-              <Camera className="mx-auto h-12 w-12 text-gray-400" />
+              <Camera className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
               <div className="mt-4">
                 <input
                   type="file"
@@ -370,17 +398,17 @@ export default function PersonModal({ isOpen, onClose, title, person }: PersonMo
                 />
                 <label
                   htmlFor="image-upload"
-                  className="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200"
+                  className="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800"
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   Choose Images
                 </label>
               </div>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 PNG, JPG up to 10MB each
               </p>
               {images.length > 0 && (
-                <p className="mt-2 text-sm text-green-600">
+                <p className="mt-2 text-sm text-green-600 dark:text-green-400">
                   {images.length} image(s) selected
                 </p>
               )}

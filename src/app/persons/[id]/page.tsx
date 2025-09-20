@@ -62,16 +62,16 @@ export default async function PersonDetailsPage({ params }: PageProps) {
             <div className="flex items-center space-x-4">
               <Link
                 href="/persons"
-                className="inline-flex items-center px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to People
               </Link>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                   {person.fullName || person.businessName} 👤
                 </h1>
-                <p className="mt-2 text-sm sm:text-base text-gray-600">
+                <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                   {person.type} Contact
                 </p>
               </div>
@@ -97,25 +97,25 @@ export default async function PersonDetailsPage({ params }: PageProps) {
           {/* Left Column - Basic Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Person Information */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Contact Information</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {person.type === 'Individual' ? (
                   <>
-                    <div className="border border-gray-100 rounded-lg p-3">
-                      <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3">
+                      <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Full Name
                       </dt>
-                      <dd className="mt-1 text-sm font-semibold text-gray-900">
+                      <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                         {person.fullName || 'N/A'}
                       </dd>
                     </div>
                     {person.nicOrPassport && (
-                      <div className="border border-gray-100 rounded-lg p-3">
-                        <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3">
+                        <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                           NIC/Passport
                         </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">
+                        <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                           {person.nicOrPassport}
                         </dd>
                       </div>
@@ -123,20 +123,20 @@ export default async function PersonDetailsPage({ params }: PageProps) {
                   </>
                 ) : (
                   <>
-                    <div className="border border-gray-100 rounded-lg p-3">
-                      <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3">
+                      <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Business Name
                       </dt>
-                      <dd className="mt-1 text-sm font-semibold text-gray-900">
+                      <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                         {person.businessName || 'N/A'}
                       </dd>
                     </div>
                     {person.companyRegNo && (
-                      <div className="border border-gray-100 rounded-lg p-3">
-                        <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3">
+                        <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                           Registration Number
                         </dt>
-                        <dd className="mt-1 text-sm font-semibold text-gray-900">
+                        <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                           {person.companyRegNo}
                         </dd>
                       </div>
@@ -144,49 +144,49 @@ export default async function PersonDetailsPage({ params }: PageProps) {
                   </>
                 )}
 
-                <div className="border border-gray-100 rounded-lg p-3">
-                  <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3">
+                  <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Phone Numbers
                   </dt>
                   <dd className="mt-1 space-y-1">
                     {person.phone.map((phoneNumber: string, index: number) => (
                       <div key={index} className="flex items-center space-x-2">
                         <Phone className="h-3 w-3 text-gray-400" />
-                        <span className="text-sm font-semibold text-gray-900">{phoneNumber}</span>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{phoneNumber}</span>
                       </div>
                     ))}
                   </dd>
                 </div>
 
                 {person.email && (
-                  <div className="border border-gray-100 rounded-lg p-3">
-                    <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3">
+                    <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Email
                     </dt>
                     <dd className="mt-1 flex items-center space-x-2">
                       <Mail className="h-3 w-3 text-gray-400" />
-                      <span className="text-sm font-semibold text-gray-900">{person.email}</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{person.email}</span>
                     </dd>
                   </div>
                 )}
 
                 {person.address && (
-                  <div className="border border-gray-100 rounded-lg p-3 sm:col-span-2">
-                    <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3 sm:col-span-2">
+                    <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Address
                     </dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                    <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                       {person.address}
                     </dd>
                   </div>
                 )}
 
                 {person.notes && (
-                  <div className="border border-gray-100 rounded-lg p-3 sm:col-span-2">
-                    <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-3 sm:col-span-2">
+                    <dt className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Notes
                     </dt>
-                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                    <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                       {person.notes}
                     </dd>
                   </div>
@@ -198,11 +198,11 @@ export default async function PersonDetailsPage({ params }: PageProps) {
           {/* Right Column - Status and Meta */}
           <div className="space-y-6">
             {/* Status Card */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Status & Type</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Status & Type</h2>
               <div className="space-y-4">
                 <div>
-                  <span className="text-sm text-gray-500">Type</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Type</span>
                   <div className="mt-1 flex items-center space-x-2">
                     <TypeIcon className="h-4 w-4 text-gray-500" />
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${typeColors[person.type as keyof typeof typeColors]}`}>
@@ -210,9 +210,9 @@ export default async function PersonDetailsPage({ params }: PageProps) {
                     </span>
                   </div>
                 </div>
-                
+
                 <div>
-                  <span className="text-sm text-gray-500">Status</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Status</span>
                   <div className="mt-1">
                     {person.isBlacklisted ? (
                       <div className="flex items-center space-x-2">
@@ -230,19 +230,19 @@ export default async function PersonDetailsPage({ params }: PageProps) {
                 </div>
 
                 {person.isBlacklisted && person.riskNotes && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                    <dt className="text-xs font-medium text-red-700 uppercase tracking-wider">
+                  <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                    <dt className="text-xs font-medium text-red-700 dark:text-red-400 uppercase tracking-wider">
                       Risk Notes
                     </dt>
-                    <dd className="mt-1 text-sm text-red-800">
+                    <dd className="mt-1 text-sm text-red-800 dark:text-red-300">
                       {person.riskNotes}
                     </dd>
                   </div>
                 )}
 
                 <div>
-                  <span className="text-sm text-gray-500">Created</span>
-                  <div className="mt-1 text-base font-semibold text-gray-900">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Created</span>
+                  <div className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">
                     {new Date(person.createdAt).toLocaleDateString()}
                   </div>
                 </div>
