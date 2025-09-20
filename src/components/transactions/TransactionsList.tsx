@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { ArrowUpRight, ArrowDownLeft, Calendar, Car, User, DollarSign, Eye, Edit, Trash2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import ResponsiveSelect from '@/components/ui/ResponsiveSelect';
+import Pagination from '@/components/ui/Pagination';
 import TransactionModal from './TransactionModal';
 import { formatCurrencyWithRs } from '@/lib/currency';
 import { confirmDelete, showDeleteSuccess, showDeleteError } from '@/lib/alerts';
@@ -48,47 +49,78 @@ export default function TransactionsList() {
   const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
     fetchTransactions();
-  }, []);
+  }, [currentPage, itemsPerPage, filter, sortBy]);
 
   const fetchTransactions = async () => {
     try {
-      const response = await fetch('/api/transactions?populate=vehicleId,counterpartyId');
+      setLoading(true);
+
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+        populate: 'vehicleId,counterpartyId',
+      });
+
+      // Add filters to query
+      if (filter !== 'all') params.append('direction', filter);
+
+      const response = await fetch(`/api/transactions?${params.toString()}`);
       if (response.ok) {
         const result = await response.json();
-        const data = result.data || result;
+        const data = result.data || [];
+        const pagination = result.pagination || {};
+
         setTransactions(Array.isArray(data) ? data : []);
+        setTotalItems(pagination.total || 0);
+        setTotalPages(pagination.pages || 0);
       } else {
         console.error('Failed to fetch transactions:', response.statusText);
         setTransactions([]);
+        setTotalItems(0);
+        setTotalPages(0);
       }
     } catch (error) {
       console.error('Error fetching transactions:', error);
       setTransactions([]);
+      setTotalItems(0);
+      setTotalPages(0);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredTransactions = Array.isArray(transactions) ? transactions
-    .filter(transaction => {
-      if (filter === 'all') return true;
-      return transaction.direction === filter;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'date':
-          // Primary sort by creation date (newest first), secondary by transaction date
-          const createdAtDiff = new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime();
-          if (createdAtDiff !== 0) return createdAtDiff;
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        case 'amount':
-          return b.totalPrice - a.totalPrice;
-        default:
-          return 0;
-      }
-    }) : [];
+  // Handler for pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
+  // Handler for filter changes that should reset pagination
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort);
+    setCurrentPage(1);
+  };
+
+  // Use transactions directly since filtering is done server-side
+  const filteredTransactions = Array.isArray(transactions) ? transactions : [];
 
   const handleDelete = async (transactionId: string) => {
     const transaction = transactions.find(t => (t.id || t._id) === transactionId);
@@ -182,7 +214,7 @@ export default function TransactionsList() {
               { value: 'OUT', label: 'Sales (OUT)' }
             ]}
             selected={{ value: filter, label: filter === 'all' ? 'All Transactions' : filter === 'IN' ? 'Purchases (IN)' : 'Sales (OUT)' }}
-            onChange={(option) => setFilter(option.value)}
+            onChange={(option) => handleFilterChange(option.value)}
           />
 
           <ResponsiveSelect
@@ -192,12 +224,18 @@ export default function TransactionsList() {
               { value: 'amount', label: 'Sort by Amount' }
             ]}
             selected={{ value: sortBy, label: sortBy === 'date' ? 'Sort by Date' : 'Sort by Amount' }}
-            onChange={(option) => setSortBy(option.value)}
+            onChange={(option) => handleSortChange(option.value)}
           />
         </div>
 
-        <div className="text-sm text-gray-500">
-          {filteredTransactions.length} transaction{filteredTransactions.length !== 1 ? 's' : ''}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
+          <div className="text-gray-600">
+            Showing <span className="font-semibold text-gray-900">{totalItems}</span> transaction{totalItems !== 1 ? 's' : ''} total
+          </div>
+          <div className="text-gray-400 hidden sm:block">•</div>
+          <div className="text-gray-600">
+            Page: <span className="font-semibold text-gray-900">{filteredTransactions.length}</span> result{filteredTransactions.length !== 1 ? 's' : ''}
+          </div>
         </div>
       </div>
 
@@ -373,7 +411,19 @@ export default function TransactionsList() {
           })}
         </div>
       )}
-      
+
+      {/* Pagination */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
+      )}
+
       {/* Edit Transaction Modal */}
       <TransactionModal
         isOpen={isModalOpen}

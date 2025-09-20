@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { User, Building, Users, Edit, Trash2, Phone, Mail, AlertTriangle, Eye } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import Pagination from '@/components/ui/Pagination';
 import { confirmDelete, showDeleteSuccess, showDeleteError } from '@/lib/alerts';
 
 interface Person {
@@ -39,34 +40,81 @@ export default function PersonsList() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
     fetchPersons();
-  }, []);
+  }, [currentPage, itemsPerPage, filter]);
 
   const fetchPersons = async () => {
     try {
-      const response = await fetch('/api/persons');
+      setLoading(true);
+
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      });
+
+      // Add filters to query
+      if (filter !== 'all') {
+        if (filter === 'blacklisted') {
+          // Note: This would need to be supported by the API
+          // For now, we'll handle blacklisted filtering client-side
+        } else {
+          // Filter by type
+          params.append('type', filter);
+        }
+      }
+
+      const response = await fetch(`/api/persons?${params.toString()}`);
       if (response.ok) {
         const result = await response.json();
-        const data = result.data || result;
+        const data = result.data || [];
+        const pagination = result.pagination || {};
+
         setPersons(Array.isArray(data) ? data : []);
+        setTotalItems(pagination.total || 0);
+        setTotalPages(pagination.totalPages || 0);
       } else {
         console.error('Failed to fetch persons:', response.statusText);
         setPersons([]);
+        setTotalItems(0);
+        setTotalPages(0);
       }
     } catch (error) {
       console.error('Error fetching persons:', error);
       setPersons([]);
+      setTotalItems(0);
+      setTotalPages(0);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredPersons = Array.isArray(persons) ? persons.filter(person => {
-    if (filter === 'all') return true;
-    if (filter === 'blacklisted') return person.isBlacklisted;
-    return person.type === filter;
-  }) : [];
+  // Handler for pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  // For blacklisted filter, we need to filter client-side since API doesn't support it yet
+  const filteredPersons = Array.isArray(persons) ?
+    filter === 'blacklisted' ? persons.filter(person => person.isBlacklisted) : persons
+    : [];
 
   const handleDelete = async (id: string, name: string) => {
     const result = await confirmDelete(name, 'person');
@@ -229,6 +277,27 @@ export default function PersonsList() {
         )}
       </div>
 
+      {/* Total Count Display */}
+      <div className="flex justify-end">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
+          <div className="text-gray-600">
+            Showing <span className="font-semibold text-gray-900">{totalItems}</span> people total
+          </div>
+          <div className="text-gray-400 hidden sm:block">•</div>
+          <div className="text-gray-600">
+            Page: <span className="font-semibold text-gray-900">{filteredPersons.length}</span> result{filteredPersons.length !== 1 ? 's' : ''}
+          </div>
+          {(filter !== 'all') && (
+            <>
+              <div className="text-gray-400 hidden sm:block">•</div>
+              <div className="text-sm text-blue-600">
+                🔍 Filters applied
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
       {/* Persons Grid */}
       {filteredPersons.length === 0 ? (
         <div className="text-center py-12">
@@ -351,6 +420,18 @@ export default function PersonsList() {
             );
           })}
         </div>
+      )}
+
+      {/* Pagination */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
       )}
     </div>
   );

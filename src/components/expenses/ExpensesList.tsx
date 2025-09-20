@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Receipt, Car, User, Calendar, DollarSign, Edit, Trash2, FileText } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import ResponsiveSelect from '@/components/ui/ResponsiveSelect';
+import Pagination from '@/components/ui/Pagination';
 import ExpenseModal from './ExpenseModal';
 import { confirmDelete, showDeleteSuccess, showDeleteError } from '@/lib/alerts';
 import { formatCurrencyWithRs } from '@/lib/currency';
@@ -52,46 +53,91 @@ export default function ExpensesList() {
   const [editExpense, setEditExpense] = useState<Expense | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [currentPage, itemsPerPage, filter, sortBy]);
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('/api/expenses?populate=vehicleId,payeeId');
+      setLoading(true);
+
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+        populate: 'vehicleId,payeeId',
+      });
+
+      // Add filters to query
+      if (filter !== 'all') {
+        params.append('category', filter);
+      }
+
+      // Add sorting
+      if (sortBy === 'date') {
+        params.append('sortBy', 'date');
+        params.append('sortOrder', 'desc');
+      } else if (sortBy === 'amount') {
+        params.append('sortBy', 'amount');
+        params.append('sortOrder', 'desc');
+      } else if (sortBy === 'category') {
+        params.append('sortBy', 'category');
+        params.append('sortOrder', 'asc');
+      }
+
+      const response = await fetch(`/api/expenses?${params.toString()}`);
       if (response.ok) {
         const result = await response.json();
-        const data = result.data || result;
+        const data = result.data || [];
+        const pagination = result.pagination || {};
+
         setExpenses(Array.isArray(data) ? data : []);
+        setTotalItems(pagination.total || 0);
+        setTotalPages(pagination.totalPages || 0);
       } else {
         console.error('Failed to fetch expenses:', response.statusText);
         setExpenses([]);
+        setTotalItems(0);
+        setTotalPages(0);
       }
     } catch (error) {
       console.error('Error fetching expenses:', error);
       setExpenses([]);
+      setTotalItems(0);
+      setTotalPages(0);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredExpenses = Array.isArray(expenses) ? expenses
-    .filter(expense => {
-      if (filter === 'all') return true;
-      return expense.category === filter;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'date':
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        case 'amount':
-          return b.amount - a.amount;
-        case 'category':
-          return a.category.localeCompare(b.category);
-        default:
-          return 0;
-      }
-    }) : [];
+  // Handler for pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (newSort: string) => {
+    setSortBy(newSort);
+    setCurrentPage(1);
+  };
+
+  // Use expenses directly since filtering and sorting is done server-side
+  const filteredExpenses = Array.isArray(expenses) ? expenses : [];
 
   const handleDelete = async (id: string, description: string) => {
     const result = await confirmDelete(description, 'expense');
@@ -172,7 +218,7 @@ export default function ExpensesList() {
                     value: filter,
                     label: filter === 'all' ? 'All Categories' : filter
                   }}
-                  onChange={(option) => setFilter(option.value)}
+                  onChange={(option) => handleFilterChange(option.value)}
                 />
               </div>
 
@@ -189,19 +235,21 @@ export default function ExpensesList() {
                     label: sortBy === 'date' ? 'Sort by Date' :
                            sortBy === 'amount' ? 'Sort by Amount' : 'Sort by Category'
                   }}
-                  onChange={(option) => setSortBy(option.value)}
+                  onChange={(option) => handleSortChange(option.value)}
                 />
               </div>
             </div>
 
             {/* Summary Stats */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-              <div className="text-gray-600">
-                <span className="font-semibold text-gray-900">{filteredExpenses.length}</span> expense{filteredExpenses.length !== 1 ? 's' : ''}
-              </div>
-              <div className="text-gray-400 hidden sm:block">•</div>
-              <div className="text-gray-600">
-                Total: <span className="font-semibold text-green-600">{formatCurrencyWithRs(getTotalExpenses())}</span>
+            <div className="flex justify-end">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
+                <div className="text-gray-600">
+                  Showing <span className="font-semibold text-gray-900">{totalItems}</span> expense{totalItems !== 1 ? 's' : ''} total
+                </div>
+                <div className="text-gray-400 hidden sm:block">•</div>
+                <div className="text-gray-600">
+                  Page: <span className="font-semibold text-gray-900">{filteredExpenses.length}</span> result{filteredExpenses.length !== 1 ? 's' : ''}
+                </div>
               </div>
             </div>
           </div>
@@ -333,6 +381,18 @@ export default function ExpensesList() {
         </div>
       )}
       
+      {/* Pagination */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
+      )}
+
       {/* Edit Expense Modal */}
       <ExpenseModal
         isOpen={isModalOpen}

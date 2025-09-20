@@ -8,6 +8,7 @@ import ResponsiveSelect from '@/components/ui/ResponsiveSelect';
 import ResponsiveInput from '@/components/ui/ResponsiveInput';
 import DocumentViewer from '@/components/ui/DocumentViewer';
 import ImageViewer from '@/components/ui/ImageViewer';
+import Pagination from '@/components/ui/Pagination';
 import VehicleModal from './VehicleModal';
 import { confirmDelete, showDeleteSuccess, showDeleteError } from '@/lib/alerts';
 
@@ -57,71 +58,162 @@ export default function VehiclesList() {
   const [editVehicle, setEditVehicle] = useState<Vehicle | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  // Status counts for filter tabs
+  const [statusCounts, setStatusCounts] = useState({
+    all: 0,
+    InStock: 0,
+    Booked: 0,
+    Sold: 0,
+    NotOwned: 0,
+  });
+
   useEffect(() => {
     fetchVehicles();
-  }, []);
+    fetchStatusCounts();
+  }, [currentPage, itemsPerPage, filter, searchTerm, makeFilter, yearFilter, sortBy]);
 
   const fetchVehicles = async () => {
     try {
-      const response = await fetch('/api/vehicles');
+      setLoading(true);
+
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+        sortBy: sortBy === 'newest' ? 'updatedAt' :
+                sortBy === 'oldest' ? 'updatedAt' :
+                sortBy === 'year-desc' ? 'year' :
+                sortBy === 'year-asc' ? 'year' :
+                sortBy === 'make' ? 'make' :
+                sortBy === 'registration' ? 'registrationNumber' : 'updatedAt',
+        sortOrder: sortBy === 'oldest' || sortBy === 'year-asc' ? 'asc' : 'desc',
+      });
+
+      // Add filters to query
+      if (searchTerm) params.append('q', searchTerm);
+      if (filter !== 'all') params.append('status', filter);
+      if (makeFilter !== 'all') params.append('make', makeFilter);
+      if (yearFilter !== 'all') params.append('year', yearFilter);
+
+      const response = await fetch(`/api/vehicles?${params.toString()}`);
       if (response.ok) {
         const result = await response.json();
-        const data = result.data || result;
+        const data = result.data || [];
+        const pagination = result.pagination || {};
+
         setVehicles(Array.isArray(data) ? data : []);
+        setTotalItems(pagination.total || 0);
+        setTotalPages(pagination.totalPages || 0);
       } else {
         console.error('Failed to fetch vehicles:', response.statusText);
         setVehicles([]);
+        setTotalItems(0);
+        setTotalPages(0);
       }
     } catch (error) {
       console.error('Error fetching vehicles:', error);
       setVehicles([]);
+      setTotalItems(0);
+      setTotalPages(0);
     } finally {
       setLoading(false);
     }
   };
 
-  // Get unique makes and years for filters
+  const fetchStatusCounts = async () => {
+    try {
+      // Fetch counts for each status with current search/filter context (but not status filter)
+      const baseParams = new URLSearchParams();
+      if (searchTerm) baseParams.append('q', searchTerm);
+      if (makeFilter !== 'all') baseParams.append('make', makeFilter);
+      if (yearFilter !== 'all') baseParams.append('year', yearFilter);
+
+      const counts = {
+        all: 0,
+        InStock: 0,
+        Booked: 0,
+        Sold: 0,
+        NotOwned: 0,
+      };
+
+      // Fetch total count
+      const allResponse = await fetch(`/api/vehicles?${baseParams.toString()}&limit=1&page=1`);
+      if (allResponse.ok) {
+        const allResult = await allResponse.json();
+        counts.all = allResult.pagination?.total || 0;
+      }
+
+      // Fetch counts for each status
+      const statuses = ['InStock', 'Booked', 'Sold', 'NotOwned'];
+      await Promise.all(
+        statuses.map(async (status) => {
+          const statusParams = new URLSearchParams(baseParams);
+          statusParams.append('status', status);
+          statusParams.append('limit', '1');
+          statusParams.append('page', '1');
+
+          const response = await fetch(`/api/vehicles?${statusParams.toString()}`);
+          if (response.ok) {
+            const result = await response.json();
+            counts[status as keyof typeof counts] = result.pagination?.total || 0;
+          }
+        })
+      );
+
+      setStatusCounts(counts);
+    } catch (error) {
+      console.error('Error fetching status counts:', error);
+    }
+  };
+
+  // Get unique makes and years for filters (we'll need to fetch these separately for filters)
   const uniqueMakes = [...new Set(vehicles.map(v => v.make).filter(Boolean))].sort();
   const uniqueYears = [...new Set(vehicles.map(v => v.year).filter(Boolean))].sort((a, b) => b - a);
 
-  const filteredVehicles = Array.isArray(vehicles) ? vehicles
-    .filter(vehicle => {
-      // Status filter
-      if (filter !== 'all' && vehicle.ownershipStatus !== filter) return false;
-      
-      // Search filter
-      if (searchTerm) {
-        const searchLower = searchTerm.toLowerCase();
-        const searchableText = `${vehicle.registrationNumber} ${vehicle.make} ${vehicle.vehicleModel} ${vehicle.color}`.toLowerCase();
-        if (!searchableText.includes(searchLower)) return false;
-      }
-      
-      // Make filter
-      if (makeFilter !== 'all' && vehicle.make !== makeFilter) return false;
-      
-      // Year filter
-      if (yearFilter !== 'all' && vehicle.year.toString() !== yearFilter) return false;
-      
-      return true;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'newest':
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case 'oldest':
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-        case 'year-desc':
-          return b.year - a.year;
-        case 'year-asc':
-          return a.year - b.year;
-        case 'make':
-          return a.make.localeCompare(b.make);
-        case 'registration':
-          return a.registrationNumber.localeCompare(b.registrationNumber);
-        default:
-          return 0;
-      }
-    }) : [];
+  // Handler for pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
+  // Handler for filter changes that should reset pagination
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+  };
+
+  const handleMakeFilterChange = (make: string) => {
+    setMakeFilter(make);
+    setCurrentPage(1);
+  };
+
+  const handleYearFilterChange = (year: string) => {
+    setYearFilter(year);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort);
+    setCurrentPage(1);
+  };
+
+  // Use vehicles directly since filtering is done server-side
+  const filteredVehicles = Array.isArray(vehicles) ? vehicles : [];
 
   const handleDelete = async (id: string) => {
     const vehicle = vehicles.find(v => (v._id || v.id) === id);
@@ -186,7 +278,7 @@ export default function VehiclesList() {
                 type="text"
                 placeholder="Search vehicles by registration, make, model, or color..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 icon={<Search className="h-5 w-5 text-gray-400" />}
                 iconPosition="left"
                 className="w-full"
@@ -205,7 +297,7 @@ export default function VehiclesList() {
                       ...uniqueMakes.map(make => ({ value: make, label: make }))
                     ]}
                     selected={{ value: makeFilter, label: makeFilter === 'all' ? 'All Makes' : makeFilter }}
-                    onChange={(option) => setMakeFilter(option.value)}
+                    onChange={(option) => handleMakeFilterChange(option.value)}
                   />
                 </div>
 
@@ -218,7 +310,7 @@ export default function VehiclesList() {
                       ...uniqueYears.map(year => ({ value: year.toString(), label: year.toString() }))
                     ]}
                     selected={{ value: yearFilter, label: yearFilter === 'all' ? 'All Years' : yearFilter }}
-                    onChange={(option) => setYearFilter(option.value)}
+                    onChange={(option) => handleYearFilterChange(option.value)}
                   />
                 </div>
 
@@ -242,7 +334,7 @@ export default function VehiclesList() {
                              sortBy === 'year-asc' ? 'Year (Oldest)' :
                              sortBy === 'make' ? 'Make (A-Z)' : 'Registration'
                     }}
-                    onChange={(option) => setSortBy(option.value)}
+                    onChange={(option) => handleSortChange(option.value)}
                   />
                 </div>
               </div>
@@ -251,10 +343,10 @@ export default function VehiclesList() {
               {(searchTerm || makeFilter !== 'all' || yearFilter !== 'all' || sortBy !== 'newest') && (
                 <button
                   onClick={() => {
-                    setSearchTerm('');
-                    setMakeFilter('all');
-                    setYearFilter('all');
-                    setSortBy('newest');
+                    handleSearchChange('');
+                    handleMakeFilterChange('all');
+                    handleYearFilterChange('all');
+                    handleSortChange('newest');
                   }}
                   className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors duration-200 whitespace-nowrap"
                 >
@@ -270,11 +362,11 @@ export default function VehiclesList() {
         <div className="p-4 lg:p-6">
           <div className="flex flex-wrap gap-2 lg:gap-3">
             {[
-              { key: 'all', label: 'All Vehicles', count: vehicles.length },
-              { key: 'InStock', label: 'In Stock', count: vehicles.filter(v => v.ownershipStatus === 'InStock').length },
-              { key: 'Booked', label: 'Booked', count: vehicles.filter(v => v.ownershipStatus === 'Booked').length },
-              { key: 'Sold', label: 'Sold', count: vehicles.filter(v => v.ownershipStatus === 'Sold').length },
-              { key: 'NotOwned', label: 'Not Owned', count: vehicles.filter(v => v.ownershipStatus === 'NotOwned').length },
+              { key: 'all', label: 'All Vehicles', count: statusCounts.all },
+              { key: 'InStock', label: 'In Stock', count: statusCounts.InStock },
+              { key: 'Booked', label: 'Booked', count: statusCounts.Booked },
+              { key: 'Sold', label: 'Sold', count: statusCounts.Sold },
+              { key: 'NotOwned', label: 'Not Owned', count: statusCounts.NotOwned },
             ].map((tab) => {
               const isActive = filter === tab.key;
               let buttonClasses = 'flex items-center space-x-2 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg font-medium text-sm transition-all duration-200 transform hover:scale-105 ';
@@ -320,7 +412,7 @@ export default function VehiclesList() {
               return (
                 <button
                   key={tab.key}
-                  onClick={() => setFilter(tab.key)}
+                  onClick={() => handleFilterChange(tab.key)}
                   className={buttonClasses}
                 >
                   <span>{tab.label}</span>
@@ -335,16 +427,25 @@ export default function VehiclesList() {
       </div>
 
       {/* Results Summary */}
-      <div className="flex justify-between items-center">
-        <p className="text-gray-600">
-          Showing <span className="font-semibold text-gray-900">{filteredVehicles.length}</span> of <span className="font-semibold text-gray-900">{vehicles.length}</span> vehicles
-        </p>
-        {(searchTerm || makeFilter !== 'all' || yearFilter !== 'all' || filter !== 'all') && (
-          <p className="text-sm text-blue-600">
-            <Filter className="inline h-4 w-4 mr-1" />
-            Filters applied
-          </p>
-        )}
+      <div className="flex justify-end">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
+          <div className="text-gray-600">
+            Showing <span className="font-semibold text-gray-900">{totalItems}</span> vehicle{totalItems !== 1 ? 's' : ''} total
+          </div>
+          <div className="text-gray-400 hidden sm:block">•</div>
+          <div className="text-gray-600">
+            Page: <span className="font-semibold text-gray-900">{vehicles.length}</span> result{vehicles.length !== 1 ? 's' : ''}
+          </div>
+          {(searchTerm || makeFilter !== 'all' || yearFilter !== 'all' || filter !== 'all') && (
+            <>
+              <div className="text-gray-400 hidden sm:block">•</div>
+              <div className="text-sm text-blue-600">
+                <Filter className="inline h-4 w-4 mr-1" />
+                Filters applied
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Vehicles Grid */}
@@ -474,6 +575,18 @@ export default function VehiclesList() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Pagination */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
       )}
 
       {/* Document Viewer */}
