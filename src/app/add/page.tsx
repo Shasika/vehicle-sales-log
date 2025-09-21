@@ -1,43 +1,23 @@
-import { Suspense } from 'react';
-import { requireAuth } from '@/lib/auth-utils';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Car, Receipt, Users, CreditCard, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import connectDB from '@/lib/mongodb';
-import { Vehicle, Transaction, Person } from '@/models';
+import { NavigationLink } from '@/components/ui/NavigationLink';
 
-async function getQuickStats() {
+interface Stats {
+  totalVehicles: number;
+  thisMonthSales: number;
+  totalCustomers: number;
+  pendingTransactions: number;
+}
+
+async function fetchQuickStats(): Promise<Stats> {
   try {
-    await connectDB();
-
-    const currentMonth = new Date();
-    currentMonth.setDate(1);
-    currentMonth.setHours(0, 0, 0, 0);
-
-    const [
-      totalVehicles,
-      thisMonthSales,
-      totalCustomers,
-      pendingTransactions
-    ] = await Promise.all([
-      Vehicle.countDocuments({ deletedAt: { $exists: false } }),
-      Transaction.countDocuments({
-        direction: 'OUT',
-        createdAt: { $gte: currentMonth },
-        deletedAt: { $exists: false }
-      }),
-      Person.countDocuments({ deletedAt: { $exists: false } }),
-      Transaction.countDocuments({
-        deletedAt: { $exists: false },
-        // You can add more conditions here for what constitutes "pending"
-      })
-    ]);
-
-    return {
-      totalVehicles,
-      thisMonthSales,
-      totalCustomers,
-      pendingTransactions
-    };
+    const response = await fetch('/api/stats/quick');
+    if (response.ok) {
+      return await response.json();
+    }
+    throw new Error('Failed to fetch stats');
   } catch (error) {
     console.error('Error fetching quick stats:', error);
     return {
@@ -49,10 +29,21 @@ async function getQuickStats() {
   }
 }
 
-export default async function AddPage() {
-  await requireAuth();
+export default function AddPage() {
+  const [stats, setStats] = useState<Stats>({
+    totalVehicles: 0,
+    thisMonthSales: 0,
+    totalCustomers: 0,
+    pendingTransactions: 0
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const stats = await getQuickStats();
+  useEffect(() => {
+    fetchQuickStats().then((data) => {
+      setStats(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const quickActions = [
     {
@@ -90,13 +81,13 @@ export default async function AddPage() {
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-4 mb-4">
-          <Link
+          <NavigationLink
             href="/"
             className="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors sm:hidden"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
-          </Link>
+          </NavigationLink>
         </div>
 
         <div className="text-center">
@@ -115,7 +106,7 @@ export default async function AddPage() {
           const Icon = action.icon;
 
           return (
-            <Link
+            <NavigationLink
               key={action.name}
               href={action.href}
               className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
@@ -134,7 +125,7 @@ export default async function AddPage() {
                   </p>
                 </div>
               </div>
-            </Link>
+            </NavigationLink>
           );
         })}
       </div>
@@ -144,24 +135,39 @@ export default async function AddPage() {
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
           Quick Stats 📊
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">{stats.totalVehicles}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Total Vehicles</div>
+        {isLoading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className="text-center">
+                <div className="text-2xl font-bold mb-1">
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </div>
+                <div className="text-xs">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">{stats.thisMonthSales}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">This Month Sales</div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{stats.totalVehicles}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">Total Vehicles</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{stats.thisMonthSales}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">This Month Sales</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">{stats.totalCustomers}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">Total Customers</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">{stats.pendingTransactions}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">Total Transactions</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">{stats.totalCustomers}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Total Customers</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-orange-600">{stats.pendingTransactions}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Total Transactions</div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

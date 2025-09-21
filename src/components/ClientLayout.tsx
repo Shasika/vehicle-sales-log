@@ -331,7 +331,6 @@ function NavigationContent({ children }: { children: React.ReactNode }) {
       {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-lg z-40 sm:hidden">
         <div className="w-full h-16 bg-white dark:bg-gray-900 relative shadow-2xl">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-10 bg-gray-50 dark:bg-gray-800 rounded-b-full"></div>
           <div className="flex justify-around items-center h-full pt-3 relative">
             <NavigationLink href="/" className={getNavLinkClasses('/', true)}>
               <svg className={getIconClasses('/', true)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -348,9 +347,11 @@ function NavigationContent({ children }: { children: React.ReactNode }) {
             </NavigationLink>
 
             <NavigationLink href="/add" className="flex flex-col items-center justify-center p-1.5 -mt-8 relative z-30">
-              <div className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-xl transition-colors border-4 border-white dark:border-gray-900 relative z-30">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <div className="bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-full p-3 shadow-2xl transition-all duration-200 border-4 border-white dark:border-gray-900 relative z-30 transform hover:scale-105 active:scale-95" style={{
+                boxShadow: '0 8px 25px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.2)'
+              }}>
+                <svg className="h-6 w-6 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
               </div>
             </NavigationLink>
