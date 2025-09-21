@@ -11,6 +11,7 @@ import ImageViewer from '@/components/ui/ImageViewer';
 import Pagination from '@/components/ui/Pagination';
 import VehicleModal from './VehicleModal';
 import { confirmDelete, showDeleteSuccess, showDeleteError } from '@/lib/alerts';
+import IncomeDisplay from '@/components/income/IncomeDisplay';
 
 interface Vehicle {
   id: string;
@@ -516,6 +517,19 @@ export default function VehiclesList() {
                   {vehicle.fuelType && <span>{vehicle.fuelType}</span>}
                   {vehicle.mileage != null && vehicle.mileage > 0 && <span>{vehicle.mileage.toLocaleString()} km</span>}
                 </div>
+
+                {/* Profit information for sold vehicles */}
+                {vehicle.ownershipStatus === 'Sold' && (
+                  <div className="mb-3 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                    <div className="text-xs text-gray-600 dark:text-gray-300 mb-1">Profit/Loss:</div>
+                    <IncomeDisplay
+                      vehicleId={(vehicle as any)._id || vehicle.id}
+                      direction="OUT"
+                      showDetailed={false}
+                      className="text-sm"
+                    />
+                  </div>
+                )}
 
                 {/* Document indicators */}
                 <div className="flex items-center space-x-3 mb-3">

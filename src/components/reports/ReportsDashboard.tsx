@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { format, subMonths } from 'date-fns';
-import { TrendingUp, TrendingDown, DollarSign, Car, Users, Receipt, BarChart3, Calendar, Download } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Car, Users, Receipt, BarChart3, Calendar, Download, Target } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import DatePicker from '@/components/ui/DatePicker';
 import { formatCurrencyWithRs } from '@/lib/currency';
+import IncomeAnalytics from './IncomeAnalytics';
 
 interface ReportData {
   totalRevenue: number;
@@ -42,6 +43,7 @@ export default function ReportsDashboard() {
     topPerformers: [],
   });
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
   const [dateRange, setDateRange] = useState({
     from: subMonths(new Date(), 6),
     to: new Date(),
@@ -179,7 +181,43 @@ export default function ReportsDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Date Range and Export Controls */}
+      {/* Tab Navigation */}
+      <div className="border-b border-gray-200 dark:border-gray-700">
+        <nav className="-mb-px flex space-x-8">
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'overview'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+            }`}
+          >
+            <BarChart3 className="h-4 w-4 inline mr-1" />
+            P&L Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('income')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'income'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+            }`}
+          >
+            <Target className="h-4 w-4 inline mr-1" />
+            Income Analytics
+          </button>
+        </nav>
+      </div>
+
+      {/* Income Analytics Tab */}
+      {activeTab === 'income' && (
+        <IncomeAnalytics />
+      )}
+
+      {/* P&L Overview Tab */}
+      {activeTab === 'overview' && (
+        <div className="space-y-6">
+          {/* Date Range and Export Controls */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
           <DatePicker
@@ -404,6 +442,8 @@ export default function ReportsDashboard() {
           </div>
         </div>
       </div>
+        </div>
+      )}
     </div>
   );
 }

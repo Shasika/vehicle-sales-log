@@ -8,6 +8,7 @@ import connectDB from '@/lib/mongodb';
 import { Vehicle } from '@/models';
 import DeleteVehicleButton from '@/components/vehicles/DeleteVehicleButton';
 import { formatCurrencyWithRs } from '@/lib/currency';
+import VehicleIncomeCard from '@/components/income/VehicleIncomeCard';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -52,35 +53,41 @@ export default async function VehicleDetailsPage({ params }: PageProps) {
     <div className="max-w-full xl:max-w-[1400px] mx-auto">
         {/* Header Section */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/vehicles"
-                className="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Vehicles
-              </Link>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
-                  {vehicle.registrationNumber} 🚗
-                </h1>
-                <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-300">
-                  {vehicle.make} {vehicle.vehicleModel} ({vehicle.year})
-                </p>
-              </div>
+          {/* Back button - separate row on mobile */}
+          <div className="mb-4">
+            <Link
+              href="/vehicles"
+              className="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Vehicles
+            </Link>
+          </div>
+
+          {/* Header and actions */}
+          <div className="flex flex-col space-y-4">
+            {/* Vehicle title */}
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                {vehicle.registrationNumber} 🚗
+              </h1>
+              <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-300">
+                {vehicle.make} {vehicle.vehicleModel} ({vehicle.year})
+              </p>
             </div>
-            <div className="flex space-x-3">
+
+            {/* Action buttons - stack on mobile, horizontal on larger screens */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href={`/vehicles/${vehicle._id}/history`}
-                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
               >
                 <History className="mr-2 h-4 w-4" />
                 Transaction History
               </Link>
               <Link
                 href={`/vehicles/${vehicle._id}/edit`}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
                 <Edit className="mr-2 h-4 w-4" />
                 Edit Vehicle
@@ -196,6 +203,12 @@ export default async function VehicleDetailsPage({ params }: PageProps) {
                 )}
               </div>
             </div>
+
+            {/* Profit/Loss Analysis - Only for sold vehicles */}
+            <VehicleIncomeCard
+              vehicleId={vehicle._id}
+              ownershipStatus={vehicle.ownershipStatus}
+            />
 
             {/* Documents */}
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">

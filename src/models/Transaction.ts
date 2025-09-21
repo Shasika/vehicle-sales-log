@@ -35,6 +35,12 @@ export interface ITransaction extends Document {
   documents: IDocumentReference[];
   notes?: string;
   previousTransactionId?: mongoose.Types.ObjectId;
+  // Optional calculated income fields
+  calculatedProfit?: number;
+  calculatedRevenue?: number;
+  profitMargin?: number;
+  totalExpenses?: number;
+  purchasePrice?: number;
   createdAt: Date;
   updatedAt: Date;
   createdBy: mongoose.Types.ObjectId;
@@ -135,6 +141,22 @@ const transactionSchema = new Schema<ITransaction>(
     },
     deletedAt: {
       type: Date,
+    },
+    // Optional calculated income fields (not stored by default)
+    calculatedProfit: {
+      type: Number,
+    },
+    calculatedRevenue: {
+      type: Number,
+    },
+    profitMargin: {
+      type: Number,
+    },
+    totalExpenses: {
+      type: Number,
+    },
+    purchasePrice: {
+      type: Number,
     },
   },
   {

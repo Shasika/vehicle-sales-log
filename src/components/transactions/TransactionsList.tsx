@@ -10,6 +10,7 @@ import Pagination from '@/components/ui/Pagination';
 import TransactionModal from './TransactionModal';
 import { formatCurrencyWithRs } from '@/lib/currency';
 import { confirmDelete, showDeleteSuccess, showDeleteError } from '@/lib/alerts';
+import IncomeDisplay from '@/components/income/IncomeDisplay';
 
 interface Transaction {
   _id?: string;
@@ -48,6 +49,7 @@ export default function TransactionsList() {
   const [sortBy, setSortBy] = useState<string>('date');
   const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [periodIncome, setPeriodIncome] = useState<any>(null);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,6 +59,7 @@ export default function TransactionsList() {
 
   useEffect(() => {
     fetchTransactions();
+    fetchIncomeData();
   }, [currentPage, itemsPerPage, filter, sortBy]);
 
   const fetchTransactions = async () => {
@@ -95,6 +98,18 @@ export default function TransactionsList() {
       setTotalPages(0);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchIncomeData = async () => {
+    try {
+      const response = await fetch('/api/analytics/income?period=month');
+      if (response.ok) {
+        const data = await response.json();
+        setPeriodIncome(data);
+      }
+    } catch (error) {
+      console.error('Error fetching income data:', error);
     }
   };
 
@@ -276,13 +291,20 @@ export default function TransactionsList() {
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Net Profit</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Net Profit (This Month)</p>
               <p className="text-xl font-semibold text-blue-600 dark:text-blue-400">
-                {formatCurrencyWithRs(
-                  filteredTransactions.filter(t => t.direction === 'OUT').reduce((sum, t) => sum + t.totalPrice, 0) -
-                  filteredTransactions.filter(t => t.direction === 'IN').reduce((sum, t) => sum + t.totalPrice, 0)
-                )}
+                {periodIncome ? formatCurrencyWithRs(periodIncome.totalProfit || 0) :
+                  formatCurrencyWithRs(
+                    filteredTransactions.filter(t => t.direction === 'OUT').reduce((sum, t) => sum + t.totalPrice, 0) -
+                    filteredTransactions.filter(t => t.direction === 'IN').reduce((sum, t) => sum + t.totalPrice, 0)
+                  )
+                }
               </p>
+              {periodIncome && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {periodIncome.averageProfitMargin?.toFixed(1)}% margin
+                </p>
+              )}
             </div>
             <DollarSign className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
@@ -376,6 +398,15 @@ export default function TransactionsList() {
                               </span>
                             )}
                           </p>
+                          {transaction.direction === 'OUT' && (
+                            <div className="text-sm text-gray-600 dark:text-gray-300">
+                              Profit: <IncomeDisplay
+                                vehicleId={transaction.vehicleId?._id || transaction.vehicleId?.id}
+                                direction={transaction.direction}
+                                className="inline-flex"
+                              />
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex space-x-2">
