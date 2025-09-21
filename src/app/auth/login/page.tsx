@@ -24,7 +24,7 @@ export default function LoginPage() {
   const router = useRouter();
   const signIn = useSignIn();
 
-  const { theme, setTheme, actualTheme } = useTheme();
+  const { theme, setTheme, actualTheme, isHydrated } = useTheme();
 
   const {
     register,
@@ -127,25 +127,27 @@ export default function LoginPage() {
               <span className="text-xl font-bold text-gray-900 dark:text-white">VSL</span>
             </div>
 
-            <div className="flex items-center space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
-              {(['light', 'dark', 'system'] as const).map((themeOption) => {
-                const Icon = themeIcons[themeOption];
-                return (
-                  <button
-                    key={themeOption}
-                    onClick={() => setTheme(themeOption)}
-                    className={`p-2 rounded-md transition-colors ${
-                      theme === themeOption
-                        ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
-                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                    }`}
-                    title={`Switch to ${themeOption} theme`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </button>
-                );
-              })}
-            </div>
+            {isHydrated && (
+              <div className="flex items-center space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+                {(['light', 'dark', 'system'] as const).map((themeOption) => {
+                  const Icon = themeIcons[themeOption];
+                  return (
+                    <button
+                      key={themeOption}
+                      onClick={() => setTheme(themeOption)}
+                      className={`p-2 rounded-md transition-colors ${
+                        theme === themeOption
+                          ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                      }`}
+                      title={`Switch to ${themeOption} theme`}
+                    >
+                      <Icon className="h-4 w-4" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Header */}
@@ -226,7 +228,7 @@ export default function LoginPage() {
                   error={errors.password?.message}
                   className="bg-white dark:bg-gray-800 pr-12"
                 />
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pt-6">
+                <div className="absolute inset-y-0 right-0 flex items-end pr-3 pb-1">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
