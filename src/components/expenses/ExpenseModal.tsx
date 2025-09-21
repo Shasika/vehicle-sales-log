@@ -13,6 +13,7 @@ interface ExpenseModalProps {
   onClose: () => void;
   title: string;
   expense?: any;
+  onSuccess?: () => void;
 }
 
 interface Vehicle {
@@ -30,7 +31,7 @@ interface Person {
   type: string;
 }
 
-export default function ExpenseModal({ isOpen, onClose, title, expense }: ExpenseModalProps) {
+export default function ExpenseModal({ isOpen, onClose, title, expense, onSuccess }: ExpenseModalProps) {
   const [formData, setFormData] = useState({
     vehicleId: '',
     category: 'Other',
@@ -203,6 +204,9 @@ export default function ExpenseModal({ isOpen, onClose, title, expense }: Expens
 
       if (response.ok) {
         await showSaveSuccess('Expense', !!expense);
+        if (onSuccess) {
+          onSuccess();
+        }
         onClose();
       } else {
         const errorData = await response.json();

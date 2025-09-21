@@ -142,7 +142,13 @@ export default function DashboardPage() {
         return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
       });
 
-      const expenseCategories = expenses.reduce((acc: Record<string, number>, e: any) => {
+      const thisMonthExpenseCategories = thisMonthExpenses.reduce((acc: Record<string, number>, e: any) => {
+        acc[e.category] = (acc[e.category] || 0) + e.amount;
+        return acc;
+      }, {});
+
+      // For display purposes, show recent expenses if no expenses this month
+      const recentExpenseCategories = expenses.reduce((acc: Record<string, number>, e: any) => {
         acc[e.category] = (acc[e.category] || 0) + e.amount;
         return acc;
       }, {});
@@ -150,7 +156,7 @@ export default function DashboardPage() {
       const expenseStats = {
         total: expenses.reduce((sum: number, e: any) => sum + e.amount, 0),
         thisMonth: thisMonthExpenses.reduce((sum: number, e: any) => sum + e.amount, 0),
-        categories: expenseCategories
+        categories: Object.keys(thisMonthExpenseCategories).length > 0 ? thisMonthExpenseCategories : recentExpenseCategories
       };
 
       setStats({
@@ -428,13 +434,15 @@ export default function DashboardPage() {
         {/* Expense Breakdown */}
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Monthly Expenses</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              {stats.expenses.thisMonth > 0 ? 'Monthly Expenses' : 'Recent Expenses'}
+            </h3>
             <Link href="/expenses" className="text-sm text-blue-600 hover:text-blue-700 flex items-center">
               Details <ArrowUpRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
           <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {formatCurrencyWithRs(stats.expenses.thisMonth)}
+            {formatCurrencyWithRs(stats.expenses.thisMonth > 0 ? stats.expenses.thisMonth : Object.values(stats.expenses.categories).reduce((sum: number, amount: any) => sum + amount, 0))}
           </div>
           <div className="space-y-2">
             {Object.entries(stats.expenses.categories).slice(0, 4).map(([category, amount]) => (

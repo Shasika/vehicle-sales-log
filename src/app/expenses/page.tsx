@@ -1,15 +1,42 @@
-import { Suspense } from 'react';
-import { getServerSession } from '@/lib/auth-utils';
-import { redirect } from 'next/navigation';
-import { authOptions } from '@/lib/auth';
+'use client';
+
+import { useState, useRef } from 'react';
+import { useSession } from '@/lib/auth-context';
 import ExpensesList from '@/components/expenses/ExpensesList';
 import AddExpenseButton from '@/components/expenses/AddExpenseButton';
 
-export default async function ExpensesPage() {
-  const session = await getServerSession();
-  
-  if (!session) {
-    redirect('/auth/login');
+export default function ExpensesPage() {
+  const { status } = useSession();
+  const expensesListRef = useRef<{ refreshExpenses: () => void }>(null);
+
+  const handleExpenseSuccess = () => {
+    if (expensesListRef.current) {
+      expensesListRef.current.refreshExpenses();
+    }
+  };
+
+  if (status === 'loading') {
+    return (
+      <div className="max-w-full 2xl:max-w-[1600px] mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="space-y-4 sm:space-y-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 shadow-sm animate-pulse">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-3 sm:space-y-0">
+                <div className="space-y-3 flex-1 min-w-0">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 sm:w-48"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 sm:w-32"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 sm:w-40"></div>
+                </div>
+                <div className="flex flex-col sm:items-end space-y-2">
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -26,33 +53,13 @@ export default async function ExpensesPage() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <AddExpenseButton />
+              <AddExpenseButton onSuccess={handleExpenseSuccess} />
             </div>
           </div>
         </div>
 
         {/* Content Section */}
-        <Suspense fallback={
-          <div className="space-y-4 sm:space-y-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 shadow-sm animate-pulse">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-3 sm:space-y-0">
-                  <div className="space-y-3 flex-1 min-w-0">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 sm:w-48"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 sm:w-32"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 sm:w-40"></div>
-                  </div>
-                  <div className="flex flex-col sm:items-end space-y-2">
-                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        }>
-          <ExpensesList />
-        </Suspense>
+        <ExpensesList ref={expensesListRef} />
     </div>
   );
 }

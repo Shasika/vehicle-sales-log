@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { format } from 'date-fns';
 import { Receipt, Car, User, Calendar, DollarSign, Edit, Trash2, FileText } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -45,7 +45,11 @@ const categoryColors = {
   'Other': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
 };
 
-export default function ExpensesList() {
+export interface ExpensesListRef {
+  refreshExpenses: () => void;
+}
+
+const ExpensesList = forwardRef<ExpensesListRef>((props, ref) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
@@ -62,6 +66,13 @@ export default function ExpensesList() {
   useEffect(() => {
     fetchExpenses();
   }, [currentPage, itemsPerPage, filter, sortBy]);
+
+  // Expose refresh function via ref
+  useImperativeHandle(ref, () => ({
+    refreshExpenses: () => {
+      fetchExpenses();
+    }
+  }));
 
   const fetchExpenses = async () => {
     try {
@@ -402,4 +413,8 @@ export default function ExpensesList() {
       />
     </div>
   );
-}
+});
+
+ExpensesList.displayName = 'ExpensesList';
+
+export default ExpensesList;

@@ -46,7 +46,14 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit;
     const sortObj: Record<string, 1 | -1> = {};
-    sortObj[sortBy] = sortOrder === 'asc' ? 1 : -1;
+
+    // For date sorting, also sort by createdAt to ensure newest entries appear first for same dates
+    if (sortBy === 'date') {
+      sortObj[sortBy] = sortOrder === 'asc' ? 1 : -1;
+      sortObj['createdAt'] = -1; // Always show newest created first for same dates
+    } else {
+      sortObj[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    }
 
     const [expenses, total] = await Promise.all([
       Expense.find(query)
@@ -99,8 +106,28 @@ export async function POST(request: NextRequest) {
 
     await connectDB();
 
-    const userId = new mongoose.Types.ObjectId(session.user.id);
-    
+    // Handle user ID - find user by ID or use existing ObjectId from seed data
+    let userId;
+    if (mongoose.Types.ObjectId.isValid(session.user.id)) {
+      userId = new mongoose.Types.ObjectId(session.user.id);
+    } else {
+      // For demo users, find existing user in database or use default admin user
+      const existingUser = await mongoose.connection.collection('users').findOne({
+        $or: [
+          { email: session.user.email },
+          { name: session.user.name }
+        ]
+      });
+
+      if (existingUser) {
+        userId = existingUser._id;
+      } else {
+        // Use the admin user from seed data as fallback
+        const adminUser = await mongoose.connection.collection('users').findOne({ role: 'admin' });
+        userId = adminUser ? adminUser._id : new mongoose.Types.ObjectId('68cb73deac9c4854fde43e89'); // Default admin ID from seed
+      }
+    }
+
     const expense = new Expense({
       ...validation.data,
       createdBy: userId,

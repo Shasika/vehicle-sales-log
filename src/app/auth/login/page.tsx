@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-// Authentication will be handled directly without hooks
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Car } from 'lucide-react';
+import { Car, Eye, EyeOff, Sun, Moon, Monitor, Shield, Users, BarChart3 } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useSignIn } from '@/lib/auth-context';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -19,7 +20,11 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const signIn = useSignIn();
+
+  const { theme, setTheme, actualTheme } = useTheme();
 
   const {
     register,
@@ -34,45 +39,13 @@ export default function LoginPage() {
     setError('');
 
     try {
-      // Demo credentials
-      const DEMO_CREDENTIALS = {
-        email: 'admin@example.com',
-        password: 'password123'
-      };
+      const result = await signIn(data);
 
-      const DEMO_USER = {
-        id: 'demo-user',
-        email: 'admin@example.com',
-        name: 'Admin User',
-        role: 'Admin'
-      };
-
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Validate input fields
-      if (!data.email) {
-        setError('Email is required');
-        return;
-      }
-      if (!data.password) {
-        setError('Password is required');
-        return;
-      }
-
-      // Check credentials
-      if (data.email === DEMO_CREDENTIALS.email && data.password === DEMO_CREDENTIALS.password) {
-        const session = { user: DEMO_USER };
-        localStorage.setItem('auth-session', JSON.stringify(session));
-        // Force a page reload to trigger the auth context to pick up the new session
-        window.location.href = '/';
+      if (result.error) {
+        setError(result.error);
       } else {
-        // Provide specific error messages
-        if (data.email !== DEMO_CREDENTIALS.email) {
-          setError('Invalid email address. Please check your email.');
-        } else {
-          setError('Invalid password. Please check your password.');
-        }
+        // Use Next.js router for client-side navigation
+        router.push('/');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -82,83 +55,226 @@ export default function LoginPage() {
     }
   };
 
+  const themeIcons = {
+    light: Sun,
+    dark: Moon,
+    system: Monitor,
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="flex justify-center">
-            <Car className="h-12 w-12 text-blue-600" />
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Vehicle Sales Log App
-          </p>
-        </div>
-        
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
+    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900 transition-colors">
+      {/* Left Side - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 dark:from-blue-800 dark:to-purple-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative z-10 flex flex-col justify-center px-12 xl:px-16 text-white">
+          <div className="mb-8">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                <Car className="h-8 w-8" />
+              </div>
+              <h1 className="text-3xl font-bold">Vehicle Sales Log</h1>
             </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-blue-800">Demo Credentials</h3>
-              <div className="mt-1 text-sm text-blue-700">
-                <p className="mb-1"><strong>Email:</strong> admin@example.com</p>
-                <p className="mb-1"><strong>Password:</strong> password123</p>
-                <p className="text-xs">These will work after MongoDB is connected and seeded.</p>
+            <p className="text-xl text-blue-100 leading-relaxed">
+              Comprehensive vehicle sales tracking and management system for modern dealerships
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4">
+              <div className="p-2 bg-white/10 rounded-lg">
+                <Shield className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Secure & Reliable</h3>
+                <p className="text-blue-100 text-sm">Enterprise-grade security for your data</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <div className="p-2 bg-white/10 rounded-lg">
+                <Users className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Multi-User Support</h3>
+                <p className="text-blue-100 text-sm">Collaborate with your team seamlessly</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <div className="p-2 bg-white/10 rounded-lg">
+                <BarChart3 className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Advanced Analytics</h3>
+                <p className="text-blue-100 text-sm">Insights to grow your business</p>
               </div>
             </div>
           </div>
         </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-20 left-10 w-40 h-40 bg-purple-400/20 rounded-full blur-3xl"></div>
+      </div>
+
+      {/* Right Side - Login Form */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+        <div className="w-full max-w-md space-y-8">
+          {/* Theme Toggle */}
+          <div className="flex justify-between items-center">
+            <div className="lg:hidden flex items-center space-x-2">
+              <Car className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <span className="text-xl font-bold text-gray-900 dark:text-white">VSL</span>
             </div>
-          )}
 
-          <div className="space-y-4">
-            <Input
-              {...register('email')}
-              type="email"
-              label="Email address"
-              placeholder="Enter your email"
-              error={errors.email?.message}
-            />
-
-            <Input
-              {...register('password')}
-              type="password"
-              label="Password"
-              placeholder="Enter your password"
-              error={errors.password?.message}
-            />
+            <div className="flex items-center space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+              {(['light', 'dark', 'system'] as const).map((themeOption) => {
+                const Icon = themeIcons[themeOption];
+                return (
+                  <button
+                    key={themeOption}
+                    onClick={() => setTheme(themeOption)}
+                    className={`p-2 rounded-md transition-colors ${
+                      theme === themeOption
+                        ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                    }`}
+                    title={`Switch to ${themeOption} theme`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div>
+          {/* Header */}
+          <div className="text-center">
+            <div className="lg:hidden mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Welcome Back
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Sign in to your Vehicle Sales Log account
+              </p>
+            </div>
+            <div className="hidden lg:block">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Welcome Back
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Sign in to continue to Vehicle Sales Log
+              </p>
+            </div>
+          </div>
+
+          {/* Demo Credentials Card */}
+          <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0 mt-0.5">
+                <Shield className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  Demo Credentials
+                </h3>
+                <div className="space-y-1 text-sm text-blue-800 dark:text-blue-200">
+                  <div className="flex items-center space-x-2">
+                    <span className="font-medium">Email:</span>
+                    <code className="bg-blue-100 dark:bg-blue-800 px-2 py-0.5 rounded text-xs">
+                      admin@example.com
+                    </code>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-medium">Password:</span>
+                    <code className="bg-blue-100 dark:bg-blue-800 px-2 py-0.5 rounded text-xs">
+                      password123
+                    </code>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-700 dark:text-blue-300 mt-2">
+                  Ready to use after MongoDB setup and seeding
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <div className="text-sm text-red-800 dark:text-red-200">{error}</div>
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <Input
+                {...register('email')}
+                type="email"
+                label="Email address"
+                placeholder="admin@example.com"
+                error={errors.email?.message}
+                className="bg-white dark:bg-gray-800"
+              />
+
+              <div className="relative">
+                <Input
+                  {...register('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  label="Password"
+                  placeholder="Enter your password"
+                  error={errors.password?.message}
+                  className="bg-white dark:bg-gray-800 pr-12"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pt-6">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 text-base font-medium"
               loading={isLoading}
             >
-              Sign in
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
-          </div>
-        </form>
-        
-        <div className="mt-6 border-t border-gray-200 pt-6">
-          <div className="text-center">
-            <h3 className="text-sm font-medium text-gray-900 mb-3">Setup Required</h3>
-            <div className="text-xs text-gray-600 space-y-2">
-              <p>1. Set up MongoDB Atlas (free)</p>
-              <p>2. Update MONGODB_URI in .env file</p>
-              <p>3. Run: npm run seed</p>
-              <p>4. Login with demo credentials above</p>
+          </form>
+
+          {/* Setup Instructions */}
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <div className="text-center">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                First time setup
+              </h3>
+              <div className="text-xs text-gray-600 dark:text-gray-400 space-y-2">
+                <p className="flex items-center justify-center space-x-2">
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-medium">1</span>
+                  <span>Set up MongoDB Atlas (free tier available)</span>
+                </p>
+                <p className="flex items-center justify-center space-x-2">
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-medium">2</span>
+                  <span>Update MONGODB_URI in .env file</span>
+                </p>
+                <p className="flex items-center justify-center space-x-2">
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-medium">3</span>
+                  <span>Run: <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">npm run seed</code></span>
+                </p>
+                <p className="flex items-center justify-center space-x-2">
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-medium">4</span>
+                  <span>Login with demo credentials above</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>

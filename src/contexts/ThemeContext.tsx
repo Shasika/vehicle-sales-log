@@ -16,6 +16,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('system');
   const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Get system preference
   const getSystemTheme = (): 'light' | 'dark' => {
@@ -35,26 +36,35 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Initialize theme from localStorage or system preference
+  // Initialize theme from localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme') as Theme;
-      if (savedTheme) {
-        setTheme(savedTheme);
+      const savedTheme = localStorage.getItem('theme') as Theme || 'system';
+      setTheme(savedTheme);
+
+      // Determine actual theme based on saved theme
+      let currentTheme: 'light' | 'dark';
+      if (savedTheme === 'system') {
+        currentTheme = getSystemTheme();
+      } else {
+        currentTheme = savedTheme as 'light' | 'dark';
       }
+      setActualTheme(currentTheme);
+      setIsHydrated(true);
 
       // Listen for system theme changes
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => {
-        if (theme === 'system') {
-          applyTheme(getSystemTheme());
+        if (savedTheme === 'system') {
+          const newTheme = getSystemTheme();
+          applyTheme(newTheme);
         }
       };
 
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
-  }, [theme]);
+  }, []);
 
   // Apply theme when theme changes
   useEffect(() => {

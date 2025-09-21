@@ -5,8 +5,22 @@ import { Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import ExpenseModal from './ExpenseModal';
 
-export default function AddExpenseButton() {
+interface AddExpenseButtonProps {
+  onSuccess?: () => void;
+}
+
+export default function AddExpenseButton({ onSuccess }: AddExpenseButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSuccess = () => {
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
 
   return (
     <>
@@ -14,10 +28,11 @@ export default function AddExpenseButton() {
         <Plus className="h-4 w-4 mr-2" />
         Add Expense
       </Button>
-      
+
       <ExpenseModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleClose}
+        onSuccess={handleSuccess}
         title="Add New Expense"
       />
     </>
