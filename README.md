@@ -48,6 +48,10 @@ A comprehensive, production-ready web application designed for used-vehicle buy/
 
 ### 📊 Financial Intelligence & Reporting
 - **Real-Time P&L**: Live profit/loss calculations with drill-down capabilities
+- **Income Analytics Dashboard**: Comprehensive profit analysis with period-based filtering (month, year, all-time)
+- **Top Performers Analysis**: Ranking vehicles by profit, margin, or sale speed with detailed metrics
+- **Profit Visibility**: Individual profit/loss display on each vehicle and transaction view
+- **Smart Calculations**: Automatic profit computation (Sale Price - Purchase Price - Total Expenses)
 - **Inventory Valuation**: Current market value of stock with depreciation tracking
 - **Advanced Reports**: Monthly, quarterly, and yearly financial analysis
 - **Expense Management**: Categorized expense tracking with vehicle association
@@ -194,6 +198,7 @@ src/
 │   │   ├── persons/       # Customer management
 │   │   ├── expenses/      # Expense tracking
 │   │   ├── reports/       # Financial reporting
+│   │   ├── analytics/     # Income analytics and performance metrics
 │   │   └── upload/        # File upload handling
 │   ├── vehicles/          # Vehicle management pages
 │   ├── transactions/      # Transaction pages
@@ -210,6 +215,8 @@ src/
 │   ├── vehicles/         # Vehicle-related components
 │   ├── transactions/     # Transaction components
 │   ├── persons/          # Customer management components
+│   ├── income/           # Income analytics and profit display components
+│   ├── reports/          # Financial reporting components
 │   └── forms/            # Form components and validation
 ├── lib/                  # Utility libraries and configurations
 │   ├── auth.ts          # NextAuth configuration

@@ -15,6 +15,28 @@ function NavigationContent({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isNavigating } = useNavigation();
 
+  // Add favicon links programmatically to force browser to load new icon
+  useEffect(() => {
+    // Remove existing favicon links
+    const existingLinks = document.querySelectorAll('link[rel*="icon"]');
+    existingLinks.forEach(link => link.remove());
+
+    // Add new favicon links with cache busting
+    const links = [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=3' },
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png?v=3' },
+      { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon.png?v=3' },
+      { rel: 'shortcut icon', href: '/favicon.ico?v=3' },
+      { rel: 'apple-touch-icon', href: '/favicon.png?v=3' }
+    ];
+
+    links.forEach(linkData => {
+      const link = document.createElement('link');
+      Object.assign(link, linkData);
+      document.head.appendChild(link);
+    });
+  }, []);
+
   // Redirect to login if not authenticated (except on login page)
   useEffect(() => {
     if (status === 'unauthenticated' && pathname !== '/auth/login') {

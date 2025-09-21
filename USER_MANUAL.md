@@ -14,7 +14,7 @@
 | [🚙 Managing Vehicles](#-managing-vehicles) | Add, edit, track vehicles | 5 mins |
 | [💰 Recording Sales](#-recording-transactions-buysell) | Buy and sell transactions | 4 mins |
 | [👥 Customer Management](#-customer-management) | Track your customers | 3 mins |
-| [📊 Reports & Analytics](#-reports--analytics) | Financial insights | 3 mins |
+| [📊 Reports & Analytics](#-reports--analytics) | Financial insights & income analytics | 8 mins |
 | [📱 Mobile Tips](#-mobile-usage) | Using on phone/tablet | 2 mins |
 | [❓ Help & Troubleshooting](#-help--troubleshooting) | When things go wrong | 3 mins |
 
@@ -65,10 +65,11 @@
 - Enter buyer info and price
 - Done! Profit calculated automatically
 
-**4. View Reports (1 minute)**
+**4. View Reports & Analytics (1 minute)**
 - Click "Reports"
 - See profit/loss, inventory value
-- Filter by date range
+- Switch to "Income Analytics" tab for detailed profit analysis
+- Filter by date range or view all-time data
 
 ---
 
@@ -256,17 +257,92 @@
 
 ## 📊 Reports & Analytics
 
-### 📈 Financial Reports
+### 📈 Financial Reports Dashboard
 
-**Profit & Loss:**
+The Reports section provides comprehensive business insights through two main tabs:
+
+#### 1. P&L Overview
+**Profit & Loss Analysis:**
 - Monthly, quarterly, yearly views
 - Breakdown by vehicle type
 - Expense categorization
+- Real-time inventory valuation
 
-**Inventory Reports:**
-- Current stock value
-- Slow-moving vehicles
-- Inventory turnover rates
+#### 2. Income Analytics Dashboard
+
+**🎯 What is Income Analytics?**
+The Income Analytics tab provides detailed profit analysis for each vehicle sale, helping you understand which deals are most profitable.
+
+**Getting to Income Analytics:**
+1. Click **"Reports"** in the main navigation
+2. Select the **"Income Analytics"** tab
+3. Choose your time period (Month, Year, or All Time)
+
+**📊 Key Features:**
+
+**Summary Cards:**
+- **Total Sales:** Number of vehicles sold
+- **Total Revenue:** Combined sale prices
+- **Total Profit:** Net profit after all expenses
+- **Average Margin:** Profit percentage across all sales
+
+**Top Performers Table:**
+View your most profitable vehicles with:
+- Vehicle details (registration, make, model)
+- Purchase and sale prices
+- Total expenses (repairs, transport, etc.)
+- Gross profit and profit margin percentage
+- Days to sell (how quickly it sold)
+
+**Smart Sorting Options:**
+- **By Profit:** Highest profit first
+- **By Margin:** Best percentage returns
+- **By Revenue:** Highest sale prices
+- **By Speed:** Fastest selling vehicles
+
+### 💰 Understanding Profit Calculations
+
+**The Formula:**
+```
+🧮 Gross Profit = Sale Price - Purchase Price - Total Expenses
+📊 Profit Margin = (Gross Profit ÷ Sale Price) × 100
+```
+
+**What's Included in Expenses:**
+- Repair and maintenance costs
+- Transport and delivery fees
+- Registration and paperwork fees
+- Any other vehicle-related expenses
+
+**Example Calculation:**
+```
+🚗 Vehicle: Toyota Camry (ABC-123)
+💵 Purchase Price: $15,000
+🔧 Repair Costs: $1,200
+🚚 Transport: $300
+💰 Sale Price: $18,500
+
+📊 Calculation:
+   Gross Profit = $18,500 - $15,000 - $1,500 = $2,000
+   Profit Margin = ($2,000 ÷ $18,500) × 100 = 10.8%
+```
+
+### 📈 Individual Vehicle Profit Display
+
+**On Vehicle Details Page:**
+- For sold vehicles, you'll see a dedicated "Profit Analysis" card
+- Shows complete breakdown of costs and profit
+- Color-coded: Green for profit, Red for loss
+
+**In Vehicle Lists:**
+- Sold vehicles display profit information in highlighted boxes
+- Quick profit/loss indicators with amounts
+- Mobile-friendly responsive design
+
+**In Transaction Lists:**
+- Sale transactions show profit information
+- Only appears for completed sales (OUT transactions)
+- Includes profit margin percentage
 
 ### 📤 Exporting Data
 
@@ -280,6 +356,7 @@
 💡 Monthly reports → PDF for tax filing
 💡 Inventory data → Excel for analysis
 💡 Customer lists → CSV for marketing
+💡 Income analytics → Excel for profit tracking
 ```
 
 ### 📊 Key Metrics to Watch
@@ -289,6 +366,24 @@
 | **Inventory Turnover** | 6-12 times/year | Speed up sales if low |
 | **Average Profit Margin** | 15-25% | Adjust pricing strategy |
 | **Payment Collection** | 95%+ | Improve credit checks |
+| **Days to Sell** | 30-90 days | Reassess pricing if too high |
+
+### 🎯 Using Analytics for Better Decisions
+
+**Weekly Review:**
+1. Check top performers to identify successful vehicle types
+2. Look for patterns in profitable deals
+3. Identify slow-moving inventory
+
+**Monthly Analysis:**
+1. Compare profit margins across different periods
+2. Track improvement in average profit per sale
+3. Identify seasonal trends
+
+**Strategic Planning:**
+1. Focus on vehicle types with highest margins
+2. Adjust pricing based on market performance
+3. Optimize inventory based on turnover rates
 
 ---
 
@@ -437,7 +532,9 @@ You've completed the user guide! You now know how to:
 - ✅ Manage your vehicle inventory
 - ✅ Record buy/sell transactions
 - ✅ Track customers and payments
-- ✅ Generate useful reports
+- ✅ Generate useful reports and analyze income
+- ✅ Use the Income Analytics dashboard for profit tracking
+- ✅ Understand profit calculations and performance metrics
 - ✅ Use the app on mobile devices
 - ✅ Troubleshoot common issues
 
